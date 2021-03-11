@@ -1,6 +1,7 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 import Playback from "./components/Playback";
 import "./styles/main.scss";
+import  queryString from 'query-string'
 
 
 function App() {
