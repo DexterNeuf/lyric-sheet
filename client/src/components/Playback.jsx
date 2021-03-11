@@ -19,32 +19,46 @@ class Playback extends React.Component{
             
         }
     }
+
+    sendTracks(){
+       console.log(this.state.album) 
+    }
     resume(){
+
         fetch('https://api.spotify.com/v1/me/player/play', {
             method:'PUT',
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(response => response.json())
+        
     }
     pause(){
+
         fetch('https://api.spotify.com/v1/me/player/pause', {
             method:'PUT',
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(response => response.json())
+
     }
-    getAlbumTrackList(accessToken){
-        axios.get(`https://api.spotify.com/v1/albums/1xFKfTChl3w1dNFukSKW2X/tracks`,{
-            headers: {'Authorization': 'Bearer ' + accessToken}
+    getAlbumTrackList(){
+
+        axios.get(`https://api.spotify.com/v1/albums/${this.state.albumId}/tracks`,{
+            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(
            ((response)=>  {
             let newArray = []
             response.data.items.forEach(element => newArray.push(element.name))
-            this.setState({album: newArray})
-               console.log(this.state.album)
+            this.setState({album: newArray
+                },() => {
+                    this.sendTracks();
+                    })
            })
+           
         ).catch((error) => console.log(error));
+
     }
 
     getCurrentlyPlaying(accessToken){
+
     fetch('https://api.spotify.com/v1/me/player/currently-playing',{
             headers: {'Authorization': 'Bearer ' + accessToken}
         }).then(response => response.json())
@@ -54,10 +68,13 @@ class Playback extends React.Component{
             trackNumber: data.item.track_number,
             albumName: data.item.album.name,
             albumLength: data.item.album.total_tracks,
-            albumId: data.item.album.id,})
-            console.log(this.state.albumId)
-        }).then(this.pause())
+            albumId: data.item.album.id}, () =>{
+                this.getAlbumTrackList();
+            })
+        })
+
     }
+
     componentDidMount(){
         let parsed = queryString.parse(window.location.search);
         let accessToken = parsed.access_token;
@@ -68,18 +85,16 @@ class Playback extends React.Component{
         }).then(response => response.json())
         .then(data => this.setState({name:data.display_name})); 
 
-
         this.getCurrentlyPlaying(accessToken)
-        this.getAlbumTrackList(accessToken)
     }
     render(){
     return(
-    <div>
-        <h1>Playback Works</h1>
+    <main className="main-playback">
+        <h1>Playback</h1>
             <p>{this.state.name}</p>
         <p onClick={() =>{this.pause()}}>pause</p><p onClick={() =>{this.resume()}}>play</p>
         <p>{this.state.trackName} - {this.state.trackArist}</p>
-    </div>
+    </main>
     )
 }           
     }
