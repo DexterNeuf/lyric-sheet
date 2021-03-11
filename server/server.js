@@ -2,6 +2,8 @@ const express = require('express')
 const request = require('request')
 const querystring = require('querystring')
 const dotenv = require('dotenv')
+const { default: axios } = require('axios')
+const getLyrics = 'genius-lyrics-api';
 
 
 const app = express()
@@ -41,6 +43,17 @@ app.get('/callback', function(req, res) {
     let uri = process.env.FRONTEND_URI || 'http://localhost:3000/playback'
     res.redirect(uri + '?access_token=' + access_token)
   })
+});
+
+app.get('/playback', function(req, res){
+  let options ={
+  apiKey: process.env.GENUIS_TOKEN,
+	title: 'Blinding Lights',
+	artist: 'The Weeknd',
+	optimizeQuery: true
+  }
+  getLyrics(options).then((lyrics) => console.log(lyrics));
+  res.json(lyrics)
 })
 
 let port = process.env.PORT || 8888

@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route, Redirect, Link  } from "react-router-dom";
 import  queryString from 'query-string'
 import axios from "axios"
+import { getLyrics, getSong } from 'genius-lyrics-api';
 
 class Playback extends React.Component{
     constructor(){
@@ -11,17 +12,24 @@ class Playback extends React.Component{
             accessToken: "",
                 trackName: "",
                 trackNumber: "",
-                trackArist: "",
+                trackArtist: "",
                 albumName: "",
                 albumId: "",
                 albumLength: 0,
                 album: {}
-            
         }
     }
 
     sendTracks(){
-       console.log(this.state.album) 
+        
+        const options = {
+            apiKey: 'enter api key here',
+            title: this.state.trackName,
+            artist: this.state.trackArtist,
+            optimizeQuery: true
+        };
+        getLyrics(options).then((lyrics) => console.log(lyrics));
+
     }
     resume(){
 
@@ -64,7 +72,7 @@ class Playback extends React.Component{
         }).then(response => response.json())
         .then( data => {
             this.setState({ trackName:data.item.name,
-            trackArist: data.item.album.artists[0].name,
+            trackArtist: data.item.album.artists[0].name,
             trackNumber: data.item.track_number,
             albumName: data.item.album.name,
             albumLength: data.item.album.total_tracks,
@@ -93,7 +101,7 @@ class Playback extends React.Component{
         <h1>Playback</h1>
             <p>{this.state.name}</p>
         <p onClick={() =>{this.pause()}}>pause</p><p onClick={() =>{this.resume()}}>play</p>
-        <p>{this.state.trackName} - {this.state.trackArist}</p>
+        <p>{this.state.trackName} - {this.state.trackArtist}</p>
     </main>
     )
 }           
