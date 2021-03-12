@@ -21,14 +21,21 @@ class Playback extends React.Component{
     }
 
     sendTracks(){
-        
-        const options = {
-            apiKey: 'enter api key here',
-            title: this.state.trackName,
+        let newArray = [];
+        let gotLyrics = "";
+        let options = {
+            apiKey: 'Nd9cZuvDxu-q2mvaGXVxV7LKZFrrNGkuufZwGEFM9QNDzHNwTZOZUUKAd6fI9aps',
+            title: "",
             artist: this.state.trackArtist,
             optimizeQuery: true
         };
-        getLyrics(options).then((lyrics) => console.log(lyrics));
+        console.log(this.state.album[0])
+        for(let i = 0; i< this.state.albumLength; i++){
+            options.title = this.state.album[i]
+            getLyrics(options).then((lyrics) => {newArray.push(lyrics)
+            });
+        }
+        setTimeout(function(){console.log(newArray[0]); }, 5000 )
 
     }
     resume(){
