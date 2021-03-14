@@ -16,7 +16,8 @@ class Playback extends React.Component{
                 albumName: "",
                 albumId: "",
                 albumLength: 0,
-                album: {}
+                album: {},
+                albumWithLyrics: {}
         }
     }
 
@@ -28,22 +29,35 @@ class Playback extends React.Component{
             title: "",
             artist: this.state.trackArtist,
             optimizeQuery: true
-        };
+        };  
         console.log(this.state.album[0])
         for(let i = 0; i< this.state.albumLength; i++){
             options.title = this.state.album[i]
-            getLyrics(options).then((lyrics) => {newArray.push(lyrics)
+            getLyrics(options).then((lyrics) => {newArray.push((lyrics))
             });
-        }
-        setTimeout(function(){console.log(newArray[0]); }, 5000 )
-
+        };
+        console.log("first length " +this.state.albumWithLyrics.length) 
+        setTimeout(() => {
+           
+           this.setStateTracks(newArray) 
+        }, 500);
+        
     }
+
+    setStateTracks(newArray){
+        
+        this.setState({
+            albumWithLyrics : newArray} , () =>{
+            console.log(this.state.albumWithLyrics[0])
+            });
+    }
+
     resume(){
 
         fetch('https://api.spotify.com/v1/me/player/play', {
             method:'PUT',
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
-        }).then(response => response.json())
+        })  
         
     }
     pause(){
@@ -51,7 +65,7 @@ class Playback extends React.Component{
         fetch('https://api.spotify.com/v1/me/player/pause', {
             method:'PUT',
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
-        }).then(response => response.json())
+        })  
 
     }
     getAlbumTrackList(){
@@ -103,6 +117,7 @@ class Playback extends React.Component{
         this.getCurrentlyPlaying(accessToken)
     }
     render(){
+    if(this.state.albumWithLyrics.length === undefined){
     return(
     <main className="main-playback">
         <h1>Playback</h1>
@@ -111,7 +126,15 @@ class Playback extends React.Component{
         <p>{this.state.trackName} - {this.state.trackArtist}</p>
     </main>
     )
-}           
+    }
+    else{
+        return(
+            <div>
+                <p>{this.state.albumWithLyrics[0]}</p>
+            </div>
+        )
+    }
+        }           
     }
 
 export default Playback
