@@ -17,7 +17,9 @@ class Playback extends React.Component{
                 albumId: "",
                 albumLength: 0,
                 album: {},
-                albumWithLyrics: {}
+                albumWithLyrics: {},
+                albumImg: ""
+
         }
     }
 
@@ -40,7 +42,7 @@ class Playback extends React.Component{
         setTimeout(() => {
            
            this.setStateTracks(newArray) 
-        }, 500);
+        }, 1500);
         
     }
 
@@ -97,7 +99,8 @@ class Playback extends React.Component{
             trackNumber: data.item.track_number,
             albumName: data.item.album.name,
             albumLength: data.item.album.total_tracks,
-            albumId: data.item.album.id}, () =>{
+            albumId: data.item.album.id,
+            albumImg:data.item.album.images[0].url }, () =>{
                 this.getAlbumTrackList();
             })
         })
@@ -117,6 +120,9 @@ class Playback extends React.Component{
         this.getCurrentlyPlaying(accessToken)
     }
     render(){
+    const backgroundStyle ={
+        backgroundImage: 'url(' + this.state.albumImg +')'
+    }
     if(this.state.albumWithLyrics.length === undefined){
     return(
     <main className="main-playback">
@@ -131,6 +137,7 @@ class Playback extends React.Component{
         return(
             <div>
                 <p>{this.state.albumWithLyrics[0]}</p>
+                <div className="background" style={backgroundStyle}></div>
             </div>
         )
     }
