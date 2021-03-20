@@ -35,10 +35,15 @@ class Playback extends React.Component{
         console.log(this.state.album[0])
         for(let i = 0; i< this.state.albumLength; i++){
             options.title = this.state.album[i]
-            getLyrics(options).then((lyrics) => {newArray.push((lyrics))
+            getLyrics(options).then((lyrics) => {
+                let track ={
+                    lyrics: lyrics,
+                    trackNumber: i + 1
+                }
+                newArray.push((track));
             });
-        };
-        console.log("first length " +this.state.albumWithLyrics.length) 
+        }; 
+       
         setTimeout(() => {
            
            this.setStateTracks(newArray) 
@@ -50,7 +55,7 @@ class Playback extends React.Component{
         
         this.setState({
             albumWithLyrics : newArray} , () =>{
-            console.log(this.state.albumWithLyrics[0])
+            console.log(this.state.albumWithLyrics)
             });
     }
 
@@ -102,12 +107,17 @@ class Playback extends React.Component{
             albumId: data.item.album.id,
             albumImg:data.item.album.images[0].url }, () =>{
                 this.getAlbumTrackList();
+                console.log("this is the track number " + this.state.trackNumber)
             })
         })
 
     }
 
+    timer(){
+        console.log("new update")
+    }
     componentDidMount(){
+        let intervalId = setInterval(this.timer, 2000);
         let parsed = queryString.parse(window.location.search);
         let accessToken = parsed.access_token;
         this.setState({accessToken: accessToken})
@@ -119,10 +129,17 @@ class Playback extends React.Component{
 
         this.getCurrentlyPlaying(accessToken)
     }
+
+    componentWillUnmount() {
+        // use intervalId from the state to clear the interval
+        clearInterval(this.intervalId);
+     }
+     
     render(){
     const backgroundStyle ={
         backgroundImage: 'url(' + this.state.albumImg +')'
     }
+
     if(this.state.albumWithLyrics.length === undefined){
     return(
     <main className="main-playback">
@@ -135,8 +152,8 @@ class Playback extends React.Component{
     }
     else{
         return(
-            <div>
-                <p>{this.state.albumWithLyrics[0]}</p>
+            <div className ="lyrics-wrapper">
+                <p className="lyrics" > {this.state.albumWithLyrics[0].lyrics}</p>
                 <div className="background" style={backgroundStyle}></div>
             </div>
         )

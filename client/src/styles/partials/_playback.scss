@@ -8,7 +8,27 @@
     margin: 0;
   }
 }
-
+p {
+  margin: 0;
+  white-space: pre;
+}
+.lyrics-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.lyrics {
+  margin-top: 3.5rem;
+  margin-right: 0.5rem;
+  text-align: center;
+  // position: relative;
+  // position: absolute;
+  z-index: 9999;
+  -webkit-filter: blur(0px);
+  -moz-filter: blur(0px);
+  -o-filter: blur(0px);
+  -ms-filter: blur(13px);
+  filter: blur(0px);
+}
 .background {
   left: 0;
   right: 0;
@@ -16,6 +36,6 @@
   bottom: 0;
   background-size: cover;
   background-position: center center;
-  filter: blur(8em) opacity(0.8);
+  filter: blur(5.5em) opacity(0.8);
   position: absolute;
 }
