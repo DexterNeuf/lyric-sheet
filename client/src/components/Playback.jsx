@@ -19,10 +19,45 @@ class Playback extends React.Component{
                 album: {},
                 albumWithLyrics: {},
                 albumImg: "",
-                currentSongIndex: 0
+                currentSongIndex: 0,
+                albumHasChanged: true
         }
     }
 
+    resume(){
+
+        fetch('https://api.spotify.com/v1/me/player/play', {
+            method:'PUT',
+            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
+        })  
+        
+    }
+    pause(){
+
+        fetch('https://api.spotify.com/v1/me/player/pause', {
+            method:'PUT',
+            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
+        })  
+
+    }
+    
+
+    // sets the array with the grabbed lyrics to state
+    setStateTracks(newArray){
+        this.setState({
+            albumWithLyrics : newArray,
+            albumHasChanged : true} , () =>{
+                this.findSongIndex()
+            });
+        
+    }
+    //finds the index of the object with the same track number of whats store in state 
+    findSongIndex(){
+        let currentSongIndex = this.state.albumWithLyrics.findIndex((element) => element.trackNumber === this.state.trackNumber )
+        this.setState({currentSongIndex: currentSongIndex},
+        )
+        
+    }
     sendTracks(){
         let newArray = [];
         let gotLyrics = "";
@@ -51,38 +86,6 @@ class Playback extends React.Component{
         
     }
 
-    // sets the array with the grabbed lyrics to state
-    setStateTracks(newArray){
-        this.setState({
-            albumWithLyrics : newArray} , () =>{
-                this.findSongIndex(newArray)
-            });
-        
-    }
-    //finds the index of the object with the same track number of whats store in state 
-    findSongIndex(newArray){
-        let currentSongIndex = newArray.findIndex((element) => element.trackNumber === this.state.trackNumber )
-        this.setState({currentSongIndex: currentSongIndex},
-        )
-        
-    }
-
-    resume(){
-
-        fetch('https://api.spotify.com/v1/me/player/play', {
-            method:'PUT',
-            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
-        })  
-        
-    }
-    pause(){
-
-        fetch('https://api.spotify.com/v1/me/player/pause', {
-            method:'PUT',
-            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
-        })  
-
-    }
     getAlbumTrackList(){
 
         axios.get(`https://api.spotify.com/v1/albums/${this.state.albumId}/tracks`,{
@@ -122,23 +125,29 @@ class Playback extends React.Component{
     }
 
     timer = () => {
-        if (this.state.accessToken){
+        //check if song has change then updates the lyrics
+        if (this.state.accessToken && this.state.albumWithLyrics){
         fetch('https://api.spotify.com/v1/me/player/currently-playing',{
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(response => response.json())
         .then( data => {
             if(data.item.track_number !== this.state.trackNumber){
-                console.log("track change")
-            }else{
-                console.log("track no change")
+                this.setState({
+                    trackNumber: data.item.track_number
+                },()=>{
+                    this.findSongIndex()
+                })
+            } 
+            // check if album is different then grab new album info 
+            if ( data.item.album.name !== this.state.albumName){
+                this.setState({ 
+                    albumHasChanged : false
+                },() => {this.getCurrentlyPlaying()} )
+    
             }
         })
         }
-        // check if track is different then update state tracknumber to tracknumber and song 
-        // lyrics should change
-
-        // check if album is different then grab new album info 
-
+       
         // eventually have the time count up to 30 seconds to add to recently played
 
     }
@@ -175,7 +184,7 @@ class Playback extends React.Component{
     </main>
     )
     }
-    else{
+    else if (this.state.albumWithLyrics[this.state.currentSongIndex] && this.state.albumHasChanged){
         return(
             <div className ="lyrics-wrapper">
                 
@@ -185,6 +194,11 @@ class Playback extends React.Component{
             </div>
         )
     }
+     return(
+         <div>
+             loading
+         </div>
+     )
         }           
     }
 
