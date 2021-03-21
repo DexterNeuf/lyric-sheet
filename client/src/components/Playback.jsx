@@ -18,8 +18,8 @@ class Playback extends React.Component{
                 albumLength: 0,
                 album: {},
                 albumWithLyrics: {},
-                albumImg: ""
-
+                albumImg: "",
+                currentSongIndex: 0
         }
     }
 
@@ -32,31 +32,39 @@ class Playback extends React.Component{
             artist: this.state.trackArtist,
             optimizeQuery: true
         };  
-        console.log(this.state.album[0])
+
         for(let i = 0; i< this.state.albumLength; i++){
             options.title = this.state.album[i]
             getLyrics(options).then((lyrics) => {
                 let track ={
-                    lyrics: lyrics,
-                    trackNumber: i + 1
+                    trackTitle: this.state.album[i],
+                    trackNumber: i + 1,
+                    lyrics: lyrics,                    
                 }
                 newArray.push((track));
             });
         }; 
        
         setTimeout(() => {
-           
            this.setStateTracks(newArray) 
         }, 1500);
         
     }
 
+    // sets the array with the grabbed lyrics to state
     setStateTracks(newArray){
-        
         this.setState({
             albumWithLyrics : newArray} , () =>{
-            console.log(this.state.albumWithLyrics)
+                this.findSongIndex(newArray)
             });
+        
+    }
+    //finds the index of the object with the same track number of whats store in state 
+    findSongIndex(newArray){
+        let currentSongIndex = newArray.findIndex((element) => element.trackNumber === this.state.trackNumber )
+        this.setState({currentSongIndex: currentSongIndex},
+        )
+        
     }
 
     resume(){
@@ -93,10 +101,10 @@ class Playback extends React.Component{
 
     }
 
-    getCurrentlyPlaying(accessToken){
+    getCurrentlyPlaying(){
 
     fetch('https://api.spotify.com/v1/me/player/currently-playing',{
-            headers: {'Authorization': 'Bearer ' + accessToken}
+            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(response => response.json())
         .then( data => {
             this.setState({ trackName:data.item.name,
@@ -107,33 +115,50 @@ class Playback extends React.Component{
             albumId: data.item.album.id,
             albumImg:data.item.album.images[0].url }, () =>{
                 this.getAlbumTrackList();
-                console.log("this is the track number " + this.state.trackNumber)
+               
             })
         })
 
     }
 
-    timer(){
-        console.log("new update")
+    timer = () => {
+        if (this.state.accessToken){
+        fetch('https://api.spotify.com/v1/me/player/currently-playing',{
+            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
+        }).then(response => response.json())
+        .then( data => {
+            if(data.item.track_number !== this.state.trackNumber){
+                console.log("track change")
+            }else{
+                console.log("track no change")
+            }
+        })
+        }
+        // check if track is different then update state tracknumber to tracknumber and song 
+        // lyrics should change
+
+        // check if album is different then grab new album info 
+
+        // eventually have the time count up to 30 seconds to add to recently played
+
     }
+
     componentDidMount(){
-        let intervalId = setInterval(this.timer, 2000);
         let parsed = queryString.parse(window.location.search);
         let accessToken = parsed.access_token;
-        this.setState({accessToken: accessToken})
+        this.setState({accessToken: accessToken},  () =>{
+            this.getCurrentlyPlaying();
+            setInterval(this.timer, 3500);
+        } )
 
         fetch('https://api.spotify.com/v1/me',{
             headers: {'Authorization': 'Bearer ' + accessToken}
         }).then(response => response.json())
         .then(data => this.setState({name:data.display_name})); 
 
-        this.getCurrentlyPlaying(accessToken)
     }
 
-    componentWillUnmount() {
-        // use intervalId from the state to clear the interval
-        clearInterval(this.intervalId);
-     }
+
      
     render(){
     const backgroundStyle ={
@@ -153,7 +178,9 @@ class Playback extends React.Component{
     else{
         return(
             <div className ="lyrics-wrapper">
-                <p className="lyrics" > {this.state.albumWithLyrics[0].lyrics}</p>
+                
+                <p className="lyrics" > {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}</p>
+
                 <div className="background" style={backgroundStyle}></div>
             </div>
         )

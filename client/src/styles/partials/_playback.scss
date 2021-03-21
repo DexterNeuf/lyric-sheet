@@ -15,9 +15,13 @@ p {
 .lyrics-wrapper {
   display: flex;
   justify-content: center;
+  overflow-wrap: break-word;
 }
+
 .lyrics {
-  margin-top: 3.5rem;
+  padding-left: 0.5rem;
+  margin-top: 2rem;
+  max-width: 95%;
   margin-right: 0.5rem;
   text-align: center;
   // position: relative;
@@ -28,6 +32,7 @@ p {
   -o-filter: blur(0px);
   -ms-filter: blur(13px);
   filter: blur(0px);
+  max-height: 100%;
 }
 .background {
   left: 0;
