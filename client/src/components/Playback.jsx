@@ -10,6 +10,8 @@ class Playback extends React.Component{
         this.state = {
             name: "",
             accessToken: "",
+                isPlaying: false,
+                pausedCounter: 0 ,
                 trackName: "",
                 trackNumber: "",
                 trackArtist: "",
@@ -48,6 +50,7 @@ class Playback extends React.Component{
             albumWithLyrics : newArray,
             albumHasChanged : true} , () =>{
                 this.findSongIndex()
+                console.log(this.state.albumWithLyrics[this.state.currentSongIndex].lyrics.length)
             });
         
     }
@@ -60,7 +63,6 @@ class Playback extends React.Component{
     }
     sendTracks(){
         let newArray = [];
-        let gotLyrics = "";
         let options = {
             apiKey: 'Nd9cZuvDxu-q2mvaGXVxV7LKZFrrNGkuufZwGEFM9QNDzHNwTZOZUUKAd6fI9aps',
             title: "",
@@ -110,7 +112,10 @@ class Playback extends React.Component{
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(response => response.json())
         .then( data => {
-            this.setState({ trackName:data.item.name,
+            console.log(data)
+            this.setState({ 
+            isPlaying : data.is_playing,
+            trackName:data.item.name,
             trackArtist: data.item.album.artists[0].name,
             trackNumber: data.item.track_number,
             albumName: data.item.album.name,
@@ -145,7 +150,7 @@ class Playback extends React.Component{
                 },() => {this.getCurrentlyPlaying()} )
     
             }
-        })
+        }).catch((error) => console.log(error))
         }
        
         // eventually have the time count up to 30 seconds to add to recently played
@@ -174,7 +179,7 @@ class Playback extends React.Component{
         backgroundImage: 'url(' + this.state.albumImg +')'
     }
 
-    if(this.state.albumWithLyrics.length === undefined){
+    if(this.state.albumWithLyrics.length === undefined ){
     return(
     <main className="main-playback">
         <h1>Playback</h1>
@@ -194,11 +199,24 @@ class Playback extends React.Component{
             </div>
         )
     }
+     else{
      return(
          <div>
              loading
+             {this.state.albumHasChanged === false && <p>
+                 it is false
+                 </p>}
+                 {this.state.albumHasChanged === true && <p>
+                 it is true
+                 {this.setState({
+                     albumHasChanged : false
+                 }, () => {
+                     this.sendTracks()
+                 })}
+                 </p>}
          </div>
      )
+    }
         }           
     }
 
