@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1234",
+    "favAlbums": [
+      {
+        "album": "Master Of Puppets",
+        "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
+        "albumArtist": "Metallica"
+      },
+      {
+        "album": "Ride The Lighting",
+        "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
+        "albumArtist": "Metallica"
+      }
+    ]
+  },
+  {
+    "id": "123",
+    "favAlbums": [
+      {
+        "album": "Master Of Puppets",
+        "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
+        "albumArtist": "Metallica"
+      },
+      {
+        "album": "Ride The Lighting",
+        "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
+        "albumArtist": "Metallica"
+      },
+      {
+        "album": "Load",
+        "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
+        "albumArtist": "Metallica"
+      }
+    ]
+  }
+]

@@ -10,6 +10,7 @@ class Playback extends React.Component{
         this.state = {
             name: "",
             accessToken: "",
+                intialRun: true,
                 isPlaying: false,
                 pausedCounter: 0 ,
                 trackName: "",
@@ -50,7 +51,6 @@ class Playback extends React.Component{
             albumWithLyrics : newArray,
             albumHasChanged : true} , () =>{
                 this.findSongIndex()
-                console.log(this.state.albumWithLyrics[this.state.currentSongIndex].lyrics.length)
             });
         
     }
@@ -123,13 +123,25 @@ class Playback extends React.Component{
             albumId: data.item.album.id,
             albumImg:data.item.album.images[0].url }, () =>{
                 this.getAlbumTrackList();
-               
             })
         })
 
     }
 
     timer = () => {
+        //keep lyrics paused if app is started with playback state of paused
+        if (this.state.intialRun && this.state.albumWithLyrics){
+                fetch('https://api.spotify.com/v1/me/player/currently-playing',{
+                    headers: {'Authorization': 'Bearer ' + this.state.accessToken}
+                }).then(response => response.json())
+                .then( data =>{
+                    if (data.is_playing === true){
+                        this.setState({
+                            intialRun: false
+                        })
+                    }
+                })   
+        }
         //check if song has change then updates the lyrics
         if (this.state.accessToken && this.state.albumWithLyrics){
         fetch('https://api.spotify.com/v1/me/player/currently-playing',{
@@ -142,6 +154,11 @@ class Playback extends React.Component{
                 },()=>{
                     this.findSongIndex()
                 })
+                // if (data.is_playing === false){
+                //     this.setState({
+                //         pausedCounter: ++
+                //     })
+                // }
             } 
             // check if album is different then grab new album info 
             if ( data.item.album.name !== this.state.albumName){
@@ -160,7 +177,7 @@ class Playback extends React.Component{
     componentDidMount(){
         let parsed = queryString.parse(window.location.search);
         let accessToken = parsed.access_token;
-        this.setState({accessToken: accessToken},  () =>{
+        this.setState({accessToken: accessToken,},  () =>{
             this.getCurrentlyPlaying();
             setInterval(this.timer, 3500);
         } )
@@ -179,7 +196,7 @@ class Playback extends React.Component{
         backgroundImage: 'url(' + this.state.albumImg +')'
     }
 
-    if(this.state.albumWithLyrics.length === undefined ){
+    if(this.state.albumWithLyrics.length === undefined || (this.state.isPlaying === false && this.state.intialRun === true) || this.state.pausedCounter === 5){
     return(
     <main className="main-playback">
         <h1>Playback</h1>

@@ -4,9 +4,20 @@ const querystring = require('querystring')
 const dotenv = require('dotenv')
 const { default: axios } = require('axios')
 const getLyrics = 'genius-lyrics-api';
+const fs = require("fs");
+const addRequestId = require("express-request-id")();
+const { v4: uuidv4 } = require("uuid");
+var bodyParser = require("body-parser");
+var multer = require("multer");
+var forms = multer();
 
 
 const app = express()
+app.use(addRequestId);
+
+app.use(bodyParser.json());
+app.use(forms.array());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const redirect_uri = 
   process.env.REDIRECT_URI || 
@@ -55,7 +66,32 @@ app.get('/playback', function(req, res){
   getLyrics(options).then((lyrics) => console.log(lyrics));
   res.json(lyrics)
 })
-
+app.post('/user/:id', function(req, res){
+  const x = (fs.readFileSync("./data/users.json", "utf8"));
+  const xParse = JSON.parse(x)
+  const existingUserIndex = xParse.findIndex((e)=> e.id === req.params.id) 
+  if(existingUserIndex !== -1){
+    const existingAlbumIndex = xParse[existingUserIndex].favAlbums.findIndex((e)=> e.album.toUpperCase() === req.body.album.toUpperCase())
+    //adds album if it doesn't exist
+    if(existingAlbumIndex === -1){
+      const newFavAlbum = {
+        album : req.body.album,
+        albumImg : req.body.albumImg,
+        albumArtist : req.body.albumArtist
+      }
+      //pushs to fav album array
+      xParse[existingUserIndex].favAlbums.push(newFavAlbum);
+      fs.writeFileSync("./data/users.json", JSON.stringify(xParse), "utf-8")
+      }else{
+        res.json("album already favourited");
+      }
+    }else{
+      //create new user
+      req.params.id
+    }
+  
+  // console.log(xParse.findIndex((e)=> e.id === "123")) 
+})
 let port = process.env.PORT || 8888
 console.log(`Listening on port ${port}. Go /login to initiate authentication flow.`)
 const result = dotenv.config()
