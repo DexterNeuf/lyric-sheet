@@ -3,13 +3,15 @@ import { Switch, Route, Redirect, Link  } from "react-router-dom";
 import  queryString from 'query-string'
 import axios from "axios"
 import { getLyrics, getSong } from 'genius-lyrics-api';
-
+const backend = "http://localhost:8888/user/"
 class Playback extends React.Component{
     constructor(){
         super();
         this.state = {
+            id: "",
             name: "",
             accessToken: "",
+            favouriteAlbums: [],
                 intialRun: true,
                 isPlaying: false,
                 pausedCounter: 0 ,
@@ -44,7 +46,26 @@ class Playback extends React.Component{
 
     }
     
-
+    getUserFavouriteAlbums(){
+        axios.get( backend + this.state.id).then((res) => {
+            this.setState({
+                favouriteAlbums: res.data
+            },() =>{
+               console.log(this.state.favouriteAlbums[0].album) 
+            })
+        })
+    }
+    favouriteAlbum(){
+        const data = {
+            album : this.state.albumName,
+            albumImg : this.state.albumImg,
+            albumArtist : this.state.trackArtist,
+        }
+        axios.post(backend + this.state.id, data)
+        .then((response) => {
+            console.log(response)
+        })
+    }
     // sets the array with the grabbed lyrics to state
     setStateTracks(newArray){
         this.setState({
@@ -112,7 +133,6 @@ class Playback extends React.Component{
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(response => response.json())
         .then( data => {
-            console.log(data)
             this.setState({ 
             isPlaying : data.is_playing,
             trackName:data.item.name,
@@ -185,7 +205,12 @@ class Playback extends React.Component{
         fetch('https://api.spotify.com/v1/me',{
             headers: {'Authorization': 'Bearer ' + accessToken}
         }).then(response => response.json())
-        .then(data => this.setState({name:data.display_name})); 
+        .then(data => this.setState({
+            name:data.display_name,
+            id: data.id
+        },() => {
+            this.getUserFavouriteAlbums()
+        })); 
 
     }
 
@@ -201,6 +226,15 @@ class Playback extends React.Component{
     <main className="main-playback">
         <h1>Playback</h1>
             <p>{this.state.name}</p>
+            <p>{this.state.id}</p>
+            { this.state.favouriteAlbums.length > 0 && <p>
+                {this.state.favouriteAlbums[0].albumArtist}
+                 </p>
+            }
+            {this.state.favouriteAlbums.length > 0 && <p>
+                {this.state.favouriteAlbums[0].album}
+                 </p>
+            }
         <p onClick={() =>{this.pause()}}>pause</p><p onClick={() =>{this.resume()}}>play</p>
         <p>{this.state.trackName} - {this.state.trackArtist}</p>
     </main>
@@ -209,9 +243,9 @@ class Playback extends React.Component{
     else if (this.state.albumWithLyrics[this.state.currentSongIndex] && this.state.albumHasChanged){
         return(
             <div className ="lyrics-wrapper">
-                
-                <p className="lyrics" > {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}</p>
-
+                <p className="lyrics" > {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}
+                <span onClick={() =>{this.favouriteAlbum()}}>heart</span>
+                </p>
                 <div className="background" style={backgroundStyle}></div>
             </div>
         )

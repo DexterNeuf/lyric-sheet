@@ -31,6 +31,16 @@
         "album": "Load",
         "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
         "albumArtist": "Metallica"
+      },
+      {
+        "album": "Reloaded",
+        "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
+        "albumArtist": "Metallica"
+      },
+      {
+        "album": "2017 - 2019",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b27338eb912d9b66a6b54e685a8a",
+        "albumArtist": "Against All Logic"
       }
     ]
   },
@@ -41,6 +51,16 @@
         "album": "Load",
         "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
         "albumArtist": "Metallica"
+      }
+    ]
+  },
+  {
+    "id": "22wqjzyh2z6mqmf4l54mhkgfa",
+    "favAlbums": [
+      {
+        "album": "2017 - 2019",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b27338eb912d9b66a6b54e685a8a",
+        "albumArtist": "Against All Logic"
       }
     ]
   }

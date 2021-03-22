@@ -66,7 +66,13 @@ app.get('/playback', function(req, res){
   getLyrics(options).then((lyrics) => console.log(lyrics));
   res.json(lyrics)
 })
-
+app.get('/user/:id', function(req, res){
+  const readFile = (fs.readFileSync("./data/users.json", "utf8"));
+  const oldJson = JSON.parse(readFile)
+  const existingUserIndex = oldJson.findIndex((e)=> e.id === req.params.id)
+  JSON.stringify(oldJson[existingUserIndex].favAlbums)
+  res.json(oldJson[existingUserIndex].favAlbums) 
+});
 
 app.post('/user/:id', function(req, res){
   const readFile = (fs.readFileSync("./data/users.json", "utf8"));
@@ -104,8 +110,7 @@ app.post('/user/:id', function(req, res){
       fs.writeFileSync("./data/users.json", JSON.stringify(oldJson), "utf-8")
       res.json('user added')
     }
-  
-  // console.log(xParse.findIndex((e)=> e.id === "123")) 
+
 })
 let port = process.env.PORT || 8888
 console.log(`Listening on port ${port}. Go /login to initiate authentication flow.`)
