@@ -66,12 +66,14 @@ app.get('/playback', function(req, res){
   getLyrics(options).then((lyrics) => console.log(lyrics));
   res.json(lyrics)
 })
+
+
 app.post('/user/:id', function(req, res){
-  const x = (fs.readFileSync("./data/users.json", "utf8"));
-  const xParse = JSON.parse(x)
-  const existingUserIndex = xParse.findIndex((e)=> e.id === req.params.id) 
+  const readFile = (fs.readFileSync("./data/users.json", "utf8"));
+  const oldJson = JSON.parse(readFile)
+  const existingUserIndex = oldJson.findIndex((e)=> e.id === req.params.id) 
   if(existingUserIndex !== -1){
-    const existingAlbumIndex = xParse[existingUserIndex].favAlbums.findIndex((e)=> e.album.toUpperCase() === req.body.album.toUpperCase())
+    const existingAlbumIndex = oldJson[existingUserIndex].favAlbums.findIndex((e)=> e.album.toUpperCase() === req.body.album.toUpperCase())
     //adds album if it doesn't exist
     if(existingAlbumIndex === -1){
       const newFavAlbum = {
@@ -80,14 +82,27 @@ app.post('/user/:id', function(req, res){
         albumArtist : req.body.albumArtist
       }
       //pushs to fav album array
-      xParse[existingUserIndex].favAlbums.push(newFavAlbum);
-      fs.writeFileSync("./data/users.json", JSON.stringify(xParse), "utf-8")
+      oldJson[existingUserIndex].favAlbums.push(newFavAlbum);
+      fs.writeFileSync("./data/users.json", JSON.stringify(oldJson), "utf-8")
+      res.json('fav albuma added')
       }else{
         res.json("album already favourited");
       }
     }else{
       //create new user
-      req.params.id
+      let x = { 
+        id: req.params.id ,
+        favAlbums: [
+          {
+            album : req.body.album,
+        albumImg : req.body.albumImg,
+        albumArtist : req.body.albumArtist
+          }
+        ]
+      }
+      oldJson.push(x);
+      fs.writeFileSync("./data/users.json", JSON.stringify(oldJson), "utf-8")
+      res.json('user added')
     }
   
   // console.log(xParse.findIndex((e)=> e.id === "123")) 

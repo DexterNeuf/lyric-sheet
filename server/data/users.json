@@ -33,5 +33,15 @@
         "albumArtist": "Metallica"
       }
     ]
+  },
+  {
+    "id": "567",
+    "favAlbums": [
+      {
+        "album": "Load",
+        "albumImg": "https://i.scdn.co/image/ab67616d00001e025b5a8655b2e3e14fad7cc8cb",
+        "albumArtist": "Metallica"
+      }
+    ]
   }
 ]
