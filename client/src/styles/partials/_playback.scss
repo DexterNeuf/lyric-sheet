@@ -44,3 +44,27 @@ p {
   filter: blur(5.5em) opacity(0.8);
   position: absolute;
 }
+
+.album {
+  position: relative;
+  display: inline-block; /* Make the width of box same as image */
+  img {
+    width: 214px;
+    height: 214px;
+  }
+  &__text {
+    position: absolute;
+    z-index: 999;
+    left: 0;
+    right: 0;
+    text-align: left;
+    top: 0; /* Adjust this value to move the positioned div up and down */
+    background: rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    color: #fff;
+    width: max-content;
+    h2 {
+      font-size: 1rem;
+    }
+  }
+}

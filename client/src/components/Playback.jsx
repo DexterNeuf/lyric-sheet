@@ -237,21 +237,28 @@ class Playback extends React.Component{
     const backgroundStyle ={
         backgroundImage: 'url(' + this.state.albumImg +')'
     }
-
+    let newFavourite = "";
+    if (this.state.favouriteAlbums.length !== 0){
+        newFavourite = this.state.favouriteAlbums.map((ele) => {
+            return(
+            <div className="album">
+            <img src={ele.albumImg} alt="album cover"/>
+            <div className="album__text">
+                <h2>{ele.album}</h2>
+                <h2>{ele.albumArtist}</h2>
+            </div>
+        </div>
+        )
+        })
+        console.log(newFavourite)
+    }
     if(this.state.albumWithLyrics.length === undefined || (this.state.isPlaying === false && this.state.intialRun === true) || this.state.pausedCounter === 5){
     return(
     <main className="main-playback">
         <h1>Playback</h1>
             <p>{this.state.name}</p>
             <p>{this.state.id}</p>
-            { this.state.favouriteAlbums.length > 0 && <p>
-                {this.state.favouriteAlbums[0].albumArtist}
-                 </p>
-            }
-            {this.state.favouriteAlbums.length > 0 && <p>
-                {this.state.favouriteAlbums[0].album}
-                 </p>
-            }
+                <div>{newFavourite}</div>
         <p onClick={() =>{this.pause()}}>pause</p><p onClick={() =>{this.resume()}}>play</p>
         <p>{this.state.trackName} - {this.state.trackArtist}</p>
     </main>
