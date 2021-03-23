@@ -12,20 +12,21 @@ class Playback extends React.Component{
             name: "",
             accessToken: "",
             favouriteAlbums: [],
-                intialRun: true,
-                isPlaying: false,
-                pausedCounter: 0 ,
-                trackName: "",
-                trackNumber: "",
-                trackArtist: "",
-                albumName: "",
-                albumId: "",
-                albumLength: 0,
-                album: {},
-                albumWithLyrics: {},
-                albumImg: "",
-                currentSongIndex: 0,
-                albumHasChanged: true
+            intialRun: true,
+            isPlaying: false,
+            pausedCounter: 0 ,
+            recentCounter: 0,
+            trackName: "",
+            trackNumber: "",
+            trackArtist: "",
+            albumName: "",
+            albumId: "",
+            albumLength: 0,
+            album: {},
+            albumWithLyrics: {},
+            albumImg: "",
+            currentSongIndex: 0,
+            albumHasChanged: true
         }
     }
 
@@ -50,8 +51,6 @@ class Playback extends React.Component{
         axios.get( backend + this.state.id).then((res) => {
             this.setState({
                 favouriteAlbums: res.data
-            },() =>{
-               console.log(this.state.favouriteAlbums[0].album) 
             })
         })
     }
@@ -160,6 +159,7 @@ class Playback extends React.Component{
     }
 
     timer = () => {
+
         //keep lyrics paused if app is started with playback state of paused
         if (this.state.intialRun && this.state.albumWithLyrics){
                 fetch('https://api.spotify.com/v1/me/player/currently-playing',{
@@ -185,16 +185,10 @@ class Playback extends React.Component{
                 },()=>{
                     this.findSongIndex()
                 })
-               
-                    
             } 
             if (this.state.intialRun === false && data.is_playing === false && this.state.pausedCounter < 5){
                 this.setState({
                         pausedCounter: (this.state.pausedCounter + 1)
-                    }, () => {
-                            if(this.state.pausedCounter === 5){
-                            this.recentAlbum();
-                       }
                     })
             }
             // check if album is different then grab new album info 
@@ -202,11 +196,18 @@ class Playback extends React.Component{
                 this.setState({ 
                     albumHasChanged : false
                 },() => {this.getCurrentlyPlaying()} )
-    
+            //checks track if the same album has been playing then adds to recently played in backend
+            }else if(this.state.recentCounter < 10 && !this.state.intialRun ){
+                this.setState({
+                    recentCounter: (this.state.recentCounter + 1)
+                },()=>{
+                    if(this.state.recentCounter === 10 ){
+                        this.recentAlbum()
+                    }
+                })
             }
         }).catch((error) => console.log(error))
         }
-       
         // eventually have the time count up to 30 seconds to add to recently played
 
     }
@@ -250,7 +251,7 @@ class Playback extends React.Component{
         </div>
         )
         })
-        console.log(newFavourite)
+        
     }
     if(this.state.albumWithLyrics.length === undefined || (this.state.isPlaying === false && this.state.intialRun === true) || this.state.pausedCounter === 5){
     return(
@@ -286,7 +287,7 @@ class Playback extends React.Component{
                  {this.setState({
                      albumHasChanged : false
                  }, () => {
-                     this.sendTracks()
+                    this.getCurrentlyPlaying();
                  })}
                  </p>}
          </div>
