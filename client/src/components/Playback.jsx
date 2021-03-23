@@ -61,7 +61,18 @@ class Playback extends React.Component{
             albumImg : this.state.albumImg,
             albumArtist : this.state.trackArtist,
         }
-        axios.post(backend + this.state.id, data)
+        axios.post(backend + "favourite/" + this.state.id, data)
+        .then((response) => {
+            console.log(response)
+        })
+    }
+    recentAlbum(){
+        const data = {
+            album : this.state.albumName,
+            albumImg : this.state.albumImg,
+            albumArtist : this.state.trackArtist,
+        }
+        axios.post(backend + "recent/" + this.state.id, data)
         .then((response) => {
             console.log(response)
         })
@@ -174,12 +185,18 @@ class Playback extends React.Component{
                 },()=>{
                     this.findSongIndex()
                 })
-                // if (data.is_playing === false){
-                //     this.setState({
-                //         pausedCounter: ++
-                //     })
-                // }
+               
+                    
             } 
+            if (this.state.intialRun === false && data.is_playing === false && this.state.pausedCounter < 5){
+                this.setState({
+                        pausedCounter: (this.state.pausedCounter + 1)
+                    }, () => {
+                            if(this.state.pausedCounter === 5){
+                            this.recentAlbum();
+                       }
+                    })
+            }
             // check if album is different then grab new album info 
             if ( data.item.album.name !== this.state.albumName){
                 this.setState({ 

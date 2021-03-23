@@ -131,6 +131,7 @@ app.post('/user/recent/:id', function(req, res){
       oldJson[existingUserIndex].recentAlbums.pop(newFavAlbum)
       console.log(oldJson[existingUserIndex].recentAlbums)
       fs.writeFileSync("./data/users.json", JSON.stringify(oldJson), "utf-8")
+      res.json('album added')
     }else if(oldJson[existingUserIndex].recentAlbums.length < 3){
       const newFavAlbum = {
         album : req.body.album,
@@ -139,6 +140,7 @@ app.post('/user/recent/:id', function(req, res){
       }
       oldJson[existingUserIndex].recentAlbums.unshift(newFavAlbum)
       fs.writeFileSync("./data/users.json", JSON.stringify(oldJson), "utf-8")
+      res.json('album added')
     }
   }
 }else{
