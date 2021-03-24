@@ -62,7 +62,18 @@ class Playback extends React.Component{
         )
 
     }
-    
+    nextTrack(){
+        fetch('https://api.spotify.com/v1/me/player/next', {
+            method:'POST',
+            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
+        })
+    }
+    previousTrack(){
+        fetch('https://api.spotify.com/v1/me/player/previous', {
+            method:'POST',
+            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
+        })
+    }
     getUserFavouriteAlbums(){
         axios.get( backend +"favourites/"+ this.state.id).then((res) => {
             this.setState({
@@ -86,6 +97,7 @@ class Playback extends React.Component{
         axios.post(backend + "favourite/" + this.state.id, data)
         .then((response) => {
             console.log(response)
+            this.getUserFavouriteAlbums();
         })
     }
     recentAlbum(){
@@ -276,6 +288,9 @@ class Playback extends React.Component{
     //makes div's for rendering favourite albums
     let newFavourite = "";
     let newRecent = "";
+    let isAlbumFavourited = this.state.favouriteAlbums.find(e => e.album === this.state.albumName)
+    
+
     if (this.state.favouriteAlbums.length !== 0){
         newFavourite = this.state.favouriteAlbums.map((ele) => {
             return(
@@ -321,13 +336,14 @@ class Playback extends React.Component{
             <div>
             <div className ="lyrics-wrapper">
                 <p className="lyrics" > {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}
-                <span onClick={() =>{this.favouriteAlbum()}}>heart</span>
                 </p>
                 <div className="background" style={backgroundStyle}></div>
             </div>
             <div className="playback-bar">
             <IconContext.Provider value={{ size: "2.5em"}}>
+            <span onClick={() =>{this.previousTrack()}}>
             <IoMdSkipBackward/>
+            </span>
             {this.state.isPlaying ?
             <span onClick={() =>{this.pause()}}>
             <IoPlayCircleOutline />
@@ -336,8 +352,17 @@ class Playback extends React.Component{
             <IoPauseCircleOutline/>
             </span>
             }
+            <span onClick={() =>{this.nextTrack()}}>
             <IoMdSkipForward/>
-            <AiOutlineHeart/>
+            </span>
+            {!isAlbumFavourited ?
+            <span onClick={() =>{this.favouriteAlbum()}}>
+                <AiOutlineHeart/>
+            </span>
+            :
+            <AiFillHeart/>
+            }
+            
             </IconContext.Provider>
             </div>
             </div>
