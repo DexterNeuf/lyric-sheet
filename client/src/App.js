@@ -18,6 +18,7 @@ function App() {
       </Route>
         <Route path="/playback" component={Playback}/>
       </Switch>
+      
     </div>
   );
 }

@@ -3,8 +3,10 @@ import  queryString from 'query-string'
 import axios from "axios"
 import { getLyrics} from 'genius-lyrics-api';
 import {IconContext} from "react-icons";
-import { FiPauseCircle } from "react-icons/fi";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IoMdSkipBackward, IoMdSkipForward } from "react-icons/io";
+import { IoPauseCircleOutline, IoPlayCircleOutline} from "react-icons/io5";
+
 
 const backend = "http://localhost:8888/user/"
 
@@ -41,7 +43,11 @@ class Playback extends React.Component{
         fetch('https://api.spotify.com/v1/me/player/play', {
             method:'PUT',
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
-        })  
+        }).then(
+            this.setState({
+                isPlaying: true
+            })
+        )
         
     }
     pause(){
@@ -49,7 +55,11 @@ class Playback extends React.Component{
         fetch('https://api.spotify.com/v1/me/player/pause', {
             method:'PUT',
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
-        })  
+        }).then(
+            this.setState({
+                isPlaying: false
+            })
+        )
 
     }
     
@@ -318,8 +328,16 @@ class Playback extends React.Component{
             <div className="playback-bar">
             <IconContext.Provider value={{ size: "2.5em"}}>
             <IoMdSkipBackward/>
-            <FiPauseCircle />
+            {this.state.isPlaying ?
+            <span onClick={() =>{this.pause()}}>
+            <IoPlayCircleOutline />
+            </span>
+            : <span onClick={() =>{this.resume()}}>
+            <IoPauseCircleOutline/>
+            </span>
+            }
             <IoMdSkipForward/>
+            <AiOutlineHeart/>
             </IconContext.Provider>
             </div>
             </div>

@@ -16,6 +16,7 @@ p {
   display: flex;
   justify-content: center;
   overflow-wrap: break-word;
+  min-height: 100vh;
 }
 
 .lyrics {
@@ -78,6 +79,9 @@ p {
 
 .playback-bar {
   position: -webkit-sticky;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: sticky;
   bottom: 0px;
   height: 75px;
