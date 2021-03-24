@@ -75,3 +75,14 @@ p {
     }
   }
 }
+
+.playback-bar {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0px;
+  height: 75px;
+  width: 500px;
+  background-color: rgba(0, 0, 0, 0.99);
+  margin: 0 auto;
+  z-index: 99999;
+}

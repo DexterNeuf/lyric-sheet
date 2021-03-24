@@ -1,9 +1,14 @@
 import React from "react";
-import { Switch, Route, Redirect, Link  } from "react-router-dom";
 import  queryString from 'query-string'
 import axios from "axios"
-import { getLyrics, getSong } from 'genius-lyrics-api';
+import { getLyrics} from 'genius-lyrics-api';
+import {IconContext} from "react-icons";
+import { FiPauseCircle } from "react-icons/fi";
+import { IoMdSkipBackward, IoMdSkipForward } from "react-icons/io";
+
 const backend = "http://localhost:8888/user/"
+
+
 class Playback extends React.Component{
     constructor(){
         super();
@@ -128,7 +133,6 @@ class Playback extends React.Component{
     }
 
     getAlbumTrackList(){
-
         axios.get(`https://api.spotify.com/v1/albums/${this.state.albumId}/tracks`,{
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(
@@ -299,17 +303,25 @@ class Playback extends React.Component{
         <h1>Your recently played </h1>
                 <div className="album-wrapper">{newRecent}</div>
         <p onClick={() =>{this.pause()}}>pause</p><p onClick={() =>{this.resume()}}>play</p>
-        <p>{this.state.trackName} - {this.state.trackArtist}</p>
     </main>
     )
     }
     else if (this.state.albumWithLyrics[this.state.currentSongIndex] && this.state.albumHasChanged){
         return(
+            <div>
             <div className ="lyrics-wrapper">
                 <p className="lyrics" > {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}
                 <span onClick={() =>{this.favouriteAlbum()}}>heart</span>
                 </p>
                 <div className="background" style={backgroundStyle}></div>
+            </div>
+            <div className="playback-bar">
+            <IconContext.Provider value={{ size: "2.5em"}}>
+            <IoMdSkipBackward/>
+            <FiPauseCircle />
+            <IoMdSkipForward/>
+            </IconContext.Provider>
+            </div>
             </div>
         )
     }
