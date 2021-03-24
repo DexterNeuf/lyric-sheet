@@ -12,6 +12,7 @@ class Playback extends React.Component{
             name: "",
             accessToken: "",
             favouriteAlbums: [],
+            recentAlbums: [],
             intialRun: true,
             isPlaying: false,
             pausedCounter: 0 ,
@@ -48,9 +49,16 @@ class Playback extends React.Component{
     }
     
     getUserFavouriteAlbums(){
-        axios.get( backend + this.state.id).then((res) => {
+        axios.get( backend +"favourites/"+ this.state.id).then((res) => {
             this.setState({
                 favouriteAlbums: res.data
+            })
+        })
+    }
+    getUserRecentAlbums(){
+        axios.get( backend + "recent/"+ this.state.id).then((res) => {
+            this.setState({
+                recentAlbums: res.data
             })
         })
     }
@@ -191,11 +199,23 @@ class Playback extends React.Component{
                         pausedCounter: (this.state.pausedCounter + 1)
                     })
             }
+            // when the playback is paused resets paused counter so render can contine
+            if (data.is_playing === true && this.state.pausedCounter >= 5){
+                this.setState({
+                    pausedCounter : 0
+                })
+            }
             // check if album is different then grab new album info 
             if ( data.item.album.name !== this.state.albumName){
                 this.setState({ 
                     albumHasChanged : false
                 },() => {this.getCurrentlyPlaying()} )
+                // album has changed and previously album was added to backend reset so newer albums and be recently played
+                if(this.state.recentCounter >= 10){
+                    this.setState({
+                        recentCounter : 0
+                    })
+                }
             //checks track if the same album has been playing then adds to recently played in backend
             }else if(this.state.recentCounter < 10 && !this.state.intialRun ){
                 this.setState({
@@ -228,6 +248,7 @@ class Playback extends React.Component{
             id: data.id
         },() => {
             this.getUserFavouriteAlbums()
+            this.getUserRecentAlbums()
         })); 
 
     }
@@ -238,7 +259,9 @@ class Playback extends React.Component{
     const backgroundStyle ={
         backgroundImage: 'url(' + this.state.albumImg +')'
     }
+    //makes div's for rendering favourite albums
     let newFavourite = "";
+    let newRecent = "";
     if (this.state.favouriteAlbums.length !== 0){
         newFavourite = this.state.favouriteAlbums.map((ele) => {
             return(
@@ -250,16 +273,31 @@ class Playback extends React.Component{
             </div>
         </div>
         )
-        })
-        
+        }) 
     }
+    //makes div's for rendering recently played albums
+    
+    if (this.state.recentAlbums.length !== 0){
+        newRecent = this.state.recentAlbums.map((ele) => {
+            return(
+            <div className="album">
+            <img src={ele.albumImg} alt="album cover"/>
+            <div className="album__text">
+                <h2>{ele.album}</h2>
+                <h2>{ele.albumArtist}</h2>
+            </div>
+        </div>
+        )
+        }) 
+    }
+    //makes 
     if(this.state.albumWithLyrics.length === undefined || (this.state.isPlaying === false && this.state.intialRun === true) || this.state.pausedCounter === 5){
     return(
     <main className="main-playback">
-        <h1>Playback</h1>
-            <p>{this.state.name}</p>
-            <p>{this.state.id}</p>
-                <div>{newFavourite}</div>
+        <h1>Your Favourites</h1>
+                <div className="album-wrapper">{newFavourite}</div>
+        <h1>Your recently played </h1>
+                <div className="album-wrapper">{newRecent}</div>
         <p onClick={() =>{this.pause()}}>pause</p><p onClick={() =>{this.resume()}}>play</p>
         <p>{this.state.trackName} - {this.state.trackArtist}</p>
     </main>
@@ -278,18 +316,14 @@ class Playback extends React.Component{
      else{
      return(
          <div>
-             loading
-             {this.state.albumHasChanged === false && <p>
-                 it is false
-                 </p>}
-                 {this.state.albumHasChanged === true && <p>
-                 it is true
+             {this.state.albumHasChanged === false && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>}
+                 {this.state.albumHasChanged === true && <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
                  {this.setState({
                      albumHasChanged : false
                  }, () => {
                     this.getCurrentlyPlaying();
                  })}
-                 </p>}
+                 </div>}
          </div>
      )
     }

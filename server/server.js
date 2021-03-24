@@ -66,12 +66,20 @@ app.get('/playback', function(req, res){
   getLyrics(options).then((lyrics) => console.log(lyrics));
   res.json(lyrics)
 })
-app.get('/user/:id', function(req, res){
+app.get('/user/favourites/:id', function(req, res){
   const readFile = (fs.readFileSync("./data/users.json", "utf8"));
   const oldJson = JSON.parse(readFile)
   const existingUserIndex = oldJson.findIndex((e)=> e.id === req.params.id)
   JSON.stringify(oldJson[existingUserIndex].favAlbums)
   res.json(oldJson[existingUserIndex].favAlbums) 
+});
+
+app.get('/user/recent/:id', function(req, res){
+  const readFile = (fs.readFileSync("./data/users.json", "utf8"));
+  const oldJson = JSON.parse(readFile)
+  const existingUserIndex = oldJson.findIndex((e)=> e.id === req.params.id)
+  JSON.stringify(oldJson[existingUserIndex].recentAlbums)
+  res.json(oldJson[existingUserIndex].recentAlbums) 
 });
 
 app.post('/user/favourite/:id', function(req, res){

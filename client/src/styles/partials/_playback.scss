@@ -44,27 +44,34 @@ p {
   filter: blur(5.5em) opacity(0.8);
   position: absolute;
 }
-
+.album-wrapper {
+  display: flex;
+  width: 800px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 .album {
   position: relative;
   display: inline-block; /* Make the width of box same as image */
+  width: 214px;
+  margin-top: 2rem;
   img {
     width: 214px;
     height: 214px;
   }
   &__text {
-    position: absolute;
+    display: inline-block;
+    width: 214px;
     z-index: 999;
-    left: 0;
-    right: 0;
     text-align: left;
     top: 0; /* Adjust this value to move the positioned div up and down */
     background: rgba(0, 0, 0, 0.3);
     font-family: Arial, sans-serif;
     color: #fff;
-    width: max-content;
+    overflow-wrap: break-word;
     h2 {
       font-size: 1rem;
+      overflow-wrap: break-word;
     }
   }
 }

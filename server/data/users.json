@@ -16,23 +16,38 @@
         "album": "American Boyfriend: A Suburban Love Story",
         "albumImg": "https://i.scdn.co/image/ab67616d0000b273030b3a60e1041ebec36d2a73",
         "albumArtist": "Kevin Abstract"
+      },
+      {
+        "album": "Atomizer (Remastered)",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b273824710b06026198fc9a179c8",
+        "albumArtist": "Big Black"
+      },
+      {
+        "album": "Dopethrone",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b27384575c4c65f863eaac774fe4",
+        "albumArtist": "Electric Wizard"
+      },
+      {
+        "album": "Get To Heaven (Deluxe)",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b273889741e4d5cfc40e4610770c",
+        "albumArtist": "Everything Everything"
       }
     ],
     "recentAlbums": [
       {
-        "album": "Holograms",
-        "albumImg": "https://i.scdn.co/image/ab67616d0000b273df473912566a90c3a2a7a63a",
-        "albumArtist": "Holograms"
+        "album": "Get To Heaven (Deluxe)",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b273889741e4d5cfc40e4610770c",
+        "albumArtist": "Everything Everything"
       },
       {
-        "album": "Post-Nothing",
-        "albumImg": "https://i.scdn.co/image/ab67616d0000b2739219c59c0e90d3e403eba1bb",
-        "albumArtist": "Japandroids"
+        "album": "Dopethrone",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b27384575c4c65f863eaac774fe4",
+        "albumArtist": "Electric Wizard"
       },
       {
-        "album": "NO DREAM",
-        "albumImg": "https://i.scdn.co/image/ab67616d0000b273207b18558a2e261899d950b0",
-        "albumArtist": "Jeff Rosenstock"
+        "album": "Atomizer (Remastered)",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b273824710b06026198fc9a179c8",
+        "albumArtist": "Big Black"
       }
     ]
   },
