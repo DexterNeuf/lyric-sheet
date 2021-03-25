@@ -221,9 +221,8 @@ class Playback extends React.Component{
             albumImg:data.item.album.images[0].url,
             albumLink:data.item.album.external_urls.spotify }, () =>{
                 this.getAlbumTrackList();
-                console.log(this.state.albumLink)
             })
-        })
+        }).catch((error) => console.log(error))
 
     }
 
@@ -415,14 +414,16 @@ class Playback extends React.Component{
      else{
      return(
          <div>
+             <div className="loading">
              {this.state.albumHasChanged === false && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>}
-                 {this.state.albumHasChanged === true && <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                 {this.state.albumHasChanged === true && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
                  {this.setState({
                      albumHasChanged : false
                  }, () => {
-                    this.getCurrentlyPlaying();
+                    setTimeout(() => { this.getCurrentlyPlaying(); }, 250);
                  })}
                  </div>}
+                </div>
          </div>
      )
     }
