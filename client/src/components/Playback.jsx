@@ -33,6 +33,7 @@ class Playback extends React.Component{
             albumName: "",
             albumId: "",
             albumLength: 0,
+            albumLink:"",
             album: {},
             albumWithLyrics: {},
             albumImg: "",
@@ -97,6 +98,7 @@ class Playback extends React.Component{
             album : this.state.albumName,
             albumImg : this.state.albumImg,
             albumArtist : this.state.trackArtist,
+            albumLink : this.state.albumLink
         }
         axios.post(backend + "favourite/" + this.state.id, data)
         .then((response) => {
@@ -109,6 +111,7 @@ class Playback extends React.Component{
             album : this.state.albumName,
             albumImg : this.state.albumImg,
             albumArtist : this.state.trackArtist,
+            albumLink : this.state.albumLink
         }
         axios.post(backend + "recent/" + this.state.id, data)
         .then((response) => {
@@ -215,8 +218,10 @@ class Playback extends React.Component{
             albumName: data.item.album.name,
             albumLength: data.item.album.total_tracks,
             albumId: data.item.album.id,
-            albumImg:data.item.album.images[0].url }, () =>{
+            albumImg:data.item.album.images[0].url,
+            albumLink:data.item.album.external_urls.spotify }, () =>{
                 this.getAlbumTrackList();
+                console.log(this.state.albumLink)
             })
         })
 
@@ -325,11 +330,13 @@ class Playback extends React.Component{
         newFavourite = this.state.favouriteAlbums.map((ele) => {
             return(
             <div className="album">
+                <a href={ele.albumLink}>
             <img src={ele.albumImg} alt="album cover"/>
             <div className="album__text">
                 <h2>{ele.album}</h2>
                 <p>{ele.albumArtist}</p>
             </div>
+            </a>
         </div>
         )
         }) 
@@ -340,11 +347,13 @@ class Playback extends React.Component{
         newRecent = this.state.recentAlbums.map((ele) => {
             return(
             <div className="album">
+            <a href={ele.albumLink}>
             <img src={ele.albumImg} alt="album cover"/>
             <div className="album__text">
                 <h2>{ele.album}</h2>
                 <p>{ele.albumArtist}</p>
             </div>
+            </a>
         </div>
         )
         }) 

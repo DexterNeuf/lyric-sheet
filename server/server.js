@@ -93,7 +93,8 @@ app.post('/user/favourite/:id', function(req, res){
       const newFavAlbum = {
         album : req.body.album,
         albumImg : req.body.albumImg,
-        albumArtist : req.body.albumArtist
+        albumArtist : req.body.albumArtist,
+        albumLink : req.body.albumLink,
       }
       //pushs to fav album array
       oldJson[existingUserIndex].favAlbums.push(newFavAlbum);
@@ -110,7 +111,8 @@ app.post('/user/favourite/:id', function(req, res){
           {
         album : req.body.album,
         albumImg : req.body.albumImg,
-        albumArtist : req.body.albumArtist
+        albumArtist : req.body.albumArtist,
+        albumLink : req.body.albumLink
           }
         ],
         recentAlbums: [],
@@ -133,7 +135,8 @@ app.post('/user/recent/:id', function(req, res){
       const newFavAlbum = {
         album : req.body.album,
         albumImg : req.body.albumImg,
-        albumArtist : req.body.albumArtist
+        albumArtist : req.body.albumArtist,
+        albumLink : req.body.albumLink
       }
       oldJson[existingUserIndex].recentAlbums.unshift(newFavAlbum);
       oldJson[existingUserIndex].recentAlbums.pop(newFavAlbum)
@@ -144,7 +147,8 @@ app.post('/user/recent/:id', function(req, res){
       const newFavAlbum = {
         album : req.body.album,
         albumImg : req.body.albumImg,
-        albumArtist : req.body.albumArtist
+        albumArtist : req.body.albumArtist,
+        albumLink : req.body.albumLink
       }
       oldJson[existingUserIndex].recentAlbums.unshift(newFavAlbum)
       fs.writeFileSync("./data/users.json", JSON.stringify(oldJson), "utf-8")
@@ -160,7 +164,8 @@ app.post('/user/recent/:id', function(req, res){
       {
     album : req.body.album,
     albumImg : req.body.albumImg,
-    albumArtist : req.body.albumArtist
+    albumArtist : req.body.albumArtist,
+    albumLink : req.body.albumLink
       }
     ]
   }
