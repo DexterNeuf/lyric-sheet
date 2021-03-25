@@ -6,14 +6,17 @@ import {IconContext} from "react-icons";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IoMdSkipBackward, IoMdSkipForward } from "react-icons/io";
 import { IoPauseCircleOutline, IoPlayCircleOutline} from "react-icons/io5";
+import styled from "styled-components";
 
 
 const backend = "http://localhost:8888/user/"
 
 
+
 class Playback extends React.Component{
     constructor(){
         super();
+    
         this.state = {
             id: "",
             name: "",
@@ -34,7 +37,8 @@ class Playback extends React.Component{
             albumWithLyrics: {},
             albumImg: "",
             currentSongIndex: 0,
-            albumHasChanged: true
+            albumHasChanged: true,
+            Lyricswrapper : ""
         }
     }
 
@@ -115,7 +119,33 @@ class Playback extends React.Component{
     setStateTracks(newArray){
         this.setState({
             albumWithLyrics : newArray,
-            albumHasChanged : true} , () =>{
+            albumHasChanged : true,
+            Lyricswrapper: styled.div`
+            display: flex;
+            justify-content: center;
+            overflow-wrap: break-word;
+            min-height: 100vh;
+            z-index: 999;
+            p{
+                overflow-wrap: break-word;
+                word-break: break-word;
+                margin: 0
+            }
+            ::before {
+                content: "";
+                position: fixed;
+                left: 0;
+                right: 0;
+                z-index: -1;
+                display: block;
+                background-image: url('${this.state.albumImg}');
+                height: 100vh;
+                 background-size: cover;
+                background-position: center center;
+                filter: blur(5.5em);
+            }
+            }
+          `} , () =>{
                 this.findSongIndex()
             });
         
@@ -298,7 +328,7 @@ class Playback extends React.Component{
             <img src={ele.albumImg} alt="album cover"/>
             <div className="album__text">
                 <h2>{ele.album}</h2>
-                <h2>{ele.albumArtist}</h2>
+                <p>{ele.albumArtist}</p>
             </div>
         </div>
         )
@@ -313,7 +343,7 @@ class Playback extends React.Component{
             <img src={ele.albumImg} alt="album cover"/>
             <div className="album__text">
                 <h2>{ele.album}</h2>
-                <h2>{ele.albumArtist}</h2>
+                <p>{ele.albumArtist}</p>
             </div>
         </div>
         )
@@ -334,38 +364,43 @@ class Playback extends React.Component{
     else if (this.state.albumWithLyrics[this.state.currentSongIndex] && this.state.albumHasChanged){
         return(
             <div>
-            <div className ="lyrics-wrapper">
-                <p className="lyrics" > {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}
+             <this.state.Lyricswrapper>
+             <p className="lyrics" > {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}
                 </p>
-                <div className="background" style={backgroundStyle}></div>
-            </div>
+             </this.state.Lyricswrapper>
             <div className="playback-bar">
-            <IconContext.Provider value={{ size: "2.5em"}}>
-            <span onClick={() =>{this.previousTrack()}}>
-            <IoMdSkipBackward/>
-            </span>
-            {this.state.isPlaying ?
-            <span onClick={() =>{this.pause()}}>
-            <IoPlayCircleOutline />
-            </span>
-            : <span onClick={() =>{this.resume()}}>
-            <IoPauseCircleOutline/>
-            </span>
-            }
-            <span onClick={() =>{this.nextTrack()}}>
-            <IoMdSkipForward/>
-            </span>
-            {!isAlbumFavourited ?
-            <span onClick={() =>{this.favouriteAlbum()}}>
-                <AiOutlineHeart/>
-            </span>
-            :
-            <AiFillHeart/>
-            }
-            
-            </IconContext.Provider>
+                <div className="playback-bar__first">
+                </div>
+                <div className="playback-bar__controls">
+                    <span onClick={() =>{this.previousTrack()}}>
+                    <IoMdSkipBackward/>
+                    </span> 
+                    <IconContext.Provider value={{ size: "3em"}}>
+                    {this.state.isPlaying ?
+                    <span onClick={() =>{this.pause()}}>
+                    <IoPlayCircleOutline />
+                    </span>
+                    : <span onClick={() =>{this.resume()}}>
+                    <IoPauseCircleOutline/>
+                    </span>
+                    }</IconContext.Provider>
+                    <span onClick={() =>{this.nextTrack()}}>
+                    <IoMdSkipForward/>
+                    </span>
+                </div>
+                <div className="playback-bar__last">
+                <IconContext.Provider value={{ size: "1.75em" , className: 'react-icons' }}>
+                {!isAlbumFavourited ?
+                <span onClick={() =>{this.favouriteAlbum()}}>
+                    <AiOutlineHeart/>
+                </span>
+                :
+                <AiFillHeart/>
+                }
+                </IconContext.Provider>
             </div>
-            </div>
+         </div>
+        </div>
         )
     }
      else{
