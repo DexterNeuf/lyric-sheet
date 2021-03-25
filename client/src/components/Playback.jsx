@@ -139,13 +139,13 @@ class Playback extends React.Component{
                 position: fixed;
                 left: 0;
                 right: 0;
-                z-index: -1;
+                z-index: 1;
                 display: block;
                 background-image: url('${this.state.albumImg}');
                 height: 100vh;
                  background-size: cover;
                 background-position: center center;
-                filter: blur(5.5em);
+                filter: blur(5.5em) opacity(0.6);
             }
             }
           `} , () =>{
@@ -330,7 +330,7 @@ class Playback extends React.Component{
         newFavourite = this.state.favouriteAlbums.map((ele) => {
             return(
             <div className="album">
-                <a href={ele.albumLink}>
+                <a href={ele.albumLink} target="_blank" rel="noopener noreferrer">
             <img src={ele.albumImg} alt="album cover"/>
             <div className="album__text">
                 <h2>{ele.album}</h2>
@@ -347,7 +347,7 @@ class Playback extends React.Component{
         newRecent = this.state.recentAlbums.map((ele) => {
             return(
             <div className="album">
-            <a href={ele.albumLink}>
+            <a href={ele.albumLink} target="_blank" rel="noopener noreferrer">
             <img src={ele.albumImg} alt="album cover"/>
             <div className="album__text">
                 <h2>{ele.album}</h2>

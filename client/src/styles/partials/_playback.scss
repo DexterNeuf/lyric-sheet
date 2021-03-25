@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   height: 100%;
-  background-color: #121212;
+  background-color: rgb(10, 10, 10);
   min-height: 100vh;
   h1 {
     margin: 0;
@@ -21,18 +21,17 @@ p {
 }
 
 .lyrics {
+  display: flex;
   padding-left: 0.5rem;
   padding-top: 2rem;
   max-width: 95%;
   margin-right: 0.5rem;
   text-align: center;
   z-index: 9999;
-  -webkit-filter: blur(0px);
-  -moz-filter: blur(0px);
-  -o-filter: blur(0px);
-  -ms-filter: blur(13px);
   filter: blur(0px);
   max-height: 100%;
+  line-height: 2rem;
+  font-size: 1.125rem;
 }
 .background {
   left: 0;
@@ -41,7 +40,7 @@ p {
   bottom: 0;
   background-size: cover;
   background-position: center center;
-  filter: blur(5.5em) opacity(0.8);
+  filter: blur(2.5em) opacity(0.6);
   position: absolute;
 }
 .album-wrapper {
@@ -49,13 +48,14 @@ p {
   width: 800px;
   flex-wrap: wrap;
   justify-content: space-between;
+  margin: 2rem 0;
 }
 .album {
   position: relative;
   display: inline-block; /* Make the width of box same as image */
   width: 214px;
   margin-top: 2rem;
-  background: rgba(40, 40, 40, 0.9);
+  background: rgba(20, 20, 20, 0.9);
   padding: 1rem;
   border-radius: 6px;
   img {
@@ -74,6 +74,12 @@ p {
     h2 {
       font-size: 1rem;
       overflow-wrap: break-word;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      font-family: "Roboto", sans-serif;
+      font-weight: 100;
+      color: rgb(207, 207, 207);
     }
   }
 }
@@ -87,7 +93,7 @@ p {
   bottom: 0px;
   height: 63px;
   width: 500px;
-  background-color: rgba(24, 24, 24, 0.99);
+  background-color: rgba(10, 10, 10, 0.99);
   margin: 0 auto;
   z-index: 99999;
   &__controls {
