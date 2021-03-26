@@ -47,10 +47,8 @@ in the client folder run
 npm start
 ```
 Go to localhost:3000 with a broswer with disable same orgin policy off.
-Help with that:
-https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome?page=1&tab=votes#tab-top
 
-For Windows:
+For Windows:  
 1.Open the start menu
 
 2.Type windows+R or open "Run"
@@ -60,7 +58,7 @@ For Windows:
      chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security
     ```
     
-For Mac:
+For Mac:  
 
  1.Go to Terminal
  
@@ -69,6 +67,8 @@ For Mac:
      open /Applications/Google\ Chrome.app --args --user-data-dir="/var/tmp/Chrome dev session" --disable-web-security
     ```
 
+If options above dont work check out:  
+https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome?page=1&tab=votes#tab-top
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
