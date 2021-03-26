@@ -71,6 +71,8 @@ For Mac:
 If options above dont work check out:  
 https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome?page=1&tab=votes#tab-top
 
+Any react issues please reload page sometimes on first load their is a bug
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
