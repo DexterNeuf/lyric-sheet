@@ -49,6 +49,7 @@ npm start
 Go to localhost:3000 with a broswer with disable same orgin policy off.
 
 For Windows:  
+
 1.Open the start menu
 
 2.Type windows+R or open "Run"
