@@ -1,4 +1,5 @@
 .main-playback {
+  padding-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,10 +9,16 @@
   h1 {
     margin: 0;
   }
+  h2 {
+    margin: 0;
+  }
+  h3 {
+    font-weight: 400;
+  }
 }
 p {
   margin: 0;
-  white-space: pre;
+  white-space: break-spaces;
 }
 .lyrics-wrapper {
   display: flex;
@@ -24,7 +31,7 @@ p {
   display: flex;
   padding-left: 0.5rem;
   padding-top: 2rem;
-  max-width: 95%;
+  width: 720px;
   margin-right: 0.5rem;
   text-align: center;
   z-index: 9999;
@@ -32,6 +39,9 @@ p {
   max-height: 100%;
   line-height: 2rem;
   font-size: 1.125rem;
+  align-items: center;
+  overflow-wrap: break-word;
+  justify-content: center;
 }
 .background {
   left: 0;
@@ -48,7 +58,7 @@ p {
   width: 800px;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
 }
 .album {
   position: relative;
@@ -107,6 +117,8 @@ p {
   }
   &__first {
     width: 25%;
+    padding-left: 1rem;
+    box-sizing: border-box;
   }
   &__last {
     width: 25%;

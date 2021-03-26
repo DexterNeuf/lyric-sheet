@@ -6,6 +6,7 @@ import {IconContext} from "react-icons";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IoMdSkipBackward, IoMdSkipForward } from "react-icons/io";
 import { IoPauseCircleOutline, IoPlayCircleOutline} from "react-icons/io5";
+import { ImCancelCircle } from "react-icons/im";
 import styled from "styled-components";
 
 
@@ -42,7 +43,20 @@ class Playback extends React.Component{
             Lyricswrapper : ""
         }
     }
-
+    cancel(){
+        fetch('https://api.spotify.com/v1/me/player/pause', {
+            method:'PUT',
+            headers: {'Authorization': 'Bearer ' + this.state.accessToken}
+        }).then(
+            this.setState({
+                isPlaying: false,
+                pausedCounter: 5
+            }, () =>{
+                this.getUserFavouriteAlbums()
+                this.getUserRecentAlbums()
+            })
+        )
+    }
     resume(){
 
         fetch('https://api.spotify.com/v1/me/player/play', {
@@ -102,7 +116,6 @@ class Playback extends React.Component{
         }
         axios.post(backend + "favourite/" + this.state.id, data)
         .then((response) => {
-            console.log(response)
             this.getUserFavouriteAlbums();
         })
     }
@@ -132,7 +145,10 @@ class Playback extends React.Component{
             p{
                 overflow-wrap: break-word;
                 word-break: break-word;
-                margin: 0
+                max-width: 720px
+            }
+            p * {
+                max-width: 720px !important 
             }
             ::before {
                 content: "";
@@ -258,6 +274,7 @@ class Playback extends React.Component{
                 this.setState({
                         pausedCounter: (this.state.pausedCounter + 1)
                     })
+        
             }
             // when the playback is paused resets paused counter so render can contine
             if (data.is_playing === true && this.state.pausedCounter >= 5){
@@ -316,9 +333,6 @@ class Playback extends React.Component{
 
      
     render(){
-    const backgroundStyle ={
-        backgroundImage: 'url(' + this.state.albumImg +')'
-    }
     //makes div's for rendering favourite albums
     let newFavourite = "";
     let newRecent = "";
@@ -361,11 +375,12 @@ class Playback extends React.Component{
     if(this.state.albumWithLyrics.length === undefined || (this.state.isPlaying === false && this.state.intialRun === true) || this.state.pausedCounter === 5){
     return(
     <main className="main-playback">
-        <h1>Your Favourites</h1>
+        <h1> Welcome Dexter</h1>
+        <h3>Play any album to continue</h3>
+        <h2>Your Favourites</h2>
                 <div className="album-wrapper">{newFavourite}</div>
-        <h1>Your recently played </h1>
+        <h2>Your recently played </h2>
                 <div className="album-wrapper">{newRecent}</div>
-        <p onClick={() =>{this.pause()}}>pause</p><p onClick={() =>{this.resume()}}>play</p>
     </main>
     )
     }
@@ -373,23 +388,29 @@ class Playback extends React.Component{
         return(
             <div>
              <this.state.Lyricswrapper>
-             <p className="lyrics" > {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}
+                 <div className="lyrics">
+             <p> {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}
                 </p>
+                    </div>
              </this.state.Lyricswrapper>
             <div className="playback-bar">
                 <div className="playback-bar__first">
+                <span onClick={() =>{this.cancel()}}>
+                    <ImCancelCircle/>
+                </span>
                 </div>
                 <div className="playback-bar__controls">
+                    
                     <span onClick={() =>{this.previousTrack()}}>
                     <IoMdSkipBackward/>
                     </span> 
                     <IconContext.Provider value={{ size: "3em"}}>
                     {this.state.isPlaying ?
                     <span onClick={() =>{this.pause()}}>
-                    <IoPlayCircleOutline />
+                    <IoPauseCircleOutline/>
                     </span>
                     : <span onClick={() =>{this.resume()}}>
-                    <IoPauseCircleOutline/>
+                    <IoPlayCircleOutline />
                     </span>
                     }</IconContext.Provider>
                     <span onClick={() =>{this.nextTrack()}}>
