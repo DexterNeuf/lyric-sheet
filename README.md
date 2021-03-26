@@ -35,21 +35,41 @@ https://genius.com/api-clients
 ```
 
 
-
 ## Usage
+in the server folder run
 
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+```bash
+node server.js
 ```
+in the client folder run
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+```bash
+npm start
+```
+Go to localhost:3000 with a broswer with disable same orgin policy off
+help with that 
+https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome?page=1&tab=votes#tab-top
 
-Please make sure to update tests as appropriate.
+For Windows:
+
+    1.Open the start menu
+
+    2.Type windows+R or open "Run"
+
+    Execute the following command:
+    ```bash
+     chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security
+    ```
+For Mac:
+
+    1.Go to Terminal
+
+    2.Execute the following command:
+    3.```bash
+     open /Applications/Google\ Chrome.app --args --user-data-dir="/var/tmp/Chrome dev session" --disable-web-security
+    ```
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
