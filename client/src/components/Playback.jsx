@@ -179,7 +179,7 @@ class Playback extends React.Component{
     sendTracks(){
         let newArray = [];
         let options = {
-            apiKey: 'Nd9cZuvDxu-q2mvaGXVxV7LKZFrrNGkuufZwGEFM9QNDzHNwTZOZUUKAd6fI9aps',
+            apiKey: 'ENTER YOUR GENUIS API KEY HERE',
             title: "",
             artist: this.state.trackArtist,
             optimizeQuery: true
