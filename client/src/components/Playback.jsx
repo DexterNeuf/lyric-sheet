@@ -389,7 +389,7 @@ class Playback extends React.Component{
             <div>
              <this.state.Lyricswrapper>
                  <div className="lyrics">
-             <p> {this.state.albumWithLyrics[this.state.currentSongIndex].lyrics}
+                 <p><span className="lyrics__title">#{this.state.trackNumber} - {this.state.trackName}</span> <p></p>{this.state.albumWithLyrics[this.state.currentSongIndex].lyrics} 
                 </p>
                     </div>
              </this.state.Lyricswrapper>

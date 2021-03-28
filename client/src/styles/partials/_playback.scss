@@ -42,6 +42,11 @@ p {
   align-items: center;
   overflow-wrap: break-word;
   justify-content: center;
+  &__title {
+    font-size: 2rem;
+    line-height: 5rem;
+    font-weight: 700;
+  }
 }
 .background {
   left: 0;
