@@ -171,15 +171,19 @@ class Playback extends React.Component{
     }
     //finds the index of the object with the same track number of whats store in state 
     findSongIndex(){
+        if( this.state.albumWithLyrics.length > 1){
         let currentSongIndex = this.state.albumWithLyrics.findIndex((element) => element.trackNumber === this.state.trackNumber )
         this.setState({currentSongIndex: currentSongIndex},
         )
+        }else{
+            console.log("does not exist")
+        }
         
     }
     sendTracks(){
         let newArray = [];
         let options = {
-            apiKey: 'ENTER YOUR GENUIS API KEY HERE',
+            apiKey: 'ENTER GENUIS KEY HERE',
             title: "",
             artist: this.state.trackArtist,
             optimizeQuery: true
@@ -280,6 +284,11 @@ class Playback extends React.Component{
             if (data.is_playing === true && this.state.pausedCounter >= 5){
                 this.setState({
                     pausedCounter : 0
+                })
+            }
+            if ( data.item.name !== this.state.trackName){
+                this.setState({
+                    trackName : data.item.name 
                 })
             }
             // check if album is different then grab new album info 
