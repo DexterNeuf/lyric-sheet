@@ -5,7 +5,7 @@ Lyric Sheet is a React-App thatis clean visualization tool to enhance an album l
 ## Installation
 Clone the repo.
 
-Move to the file location and use the package manager [npm] in both the server and client folder to install the correct dependencies
+Move to the file location and use the package manager [npm] in both the server and client folder and playback server to install the correct dependencies
 ```bash
 npm install
 ```
@@ -36,6 +36,11 @@ https://genius.com/api-clients
 
 
 ## Usage
+
+in the playback-server folder run
+```bash
+node server.mjs
+```
 in the server folder run
 
 ```bash
