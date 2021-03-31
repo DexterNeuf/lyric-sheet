@@ -94,14 +94,24 @@ class Playback extends React.Component{
         })
     }
     getUserFavouriteAlbums(){
-        axios.get( backend +"favourites/"+ this.state.id).then((res) => {
+        let config ={
+            headers:{
+                "Access-Control-Allow-Origin": "*"
+                }
+        }
+        axios.get( backend +"favourites/"+ this.state.id , config).then((res) => {
             this.setState({
                 favouriteAlbums: res.data
             })
         })
     }
     getUserRecentAlbums(){
-        axios.get( backend + "recent/"+ this.state.id).then((res) => {
+        let config ={
+            headers:{
+            "Access-Control-Allow-Origin": "*"
+            }
+        }
+        axios.get( backend + "recent/"+ this.state.id , config).then((res) => {
             this.setState({
                 recentAlbums: res.data
             })
@@ -181,30 +191,23 @@ class Playback extends React.Component{
         
     }
     sendTracks(){
-        let newArray = [];
-        let options = {
-            apiKey: 'ENTER GENUIS KEY HERE',
-            title: "",
-            artist: this.state.trackArtist,
-            optimizeQuery: true
-        };  
+        const data = {
+            album : this.state.album,
+            artist : this.state.trackArtist
+        }
 
-        for(let i = 0; i< this.state.albumLength; i++){
-            options.title = this.state.album[i]
-            getLyrics(options).then((lyrics) => {
-                let track ={
-                    trackTitle: this.state.album[i],
-                    trackNumber: i + 1,
-                    lyrics: lyrics,                    
-                }
-                newArray.push((track));
-            });
-        }; 
-       
-        setTimeout(() => {
-           this.setStateTracks(newArray) 
-        }, 1500);
-        
+
+        let newArray = [];
+        let config ={
+          headers:{
+              "Access-Control-Allow-Origin": "*"
+              }
+        }
+        axios.post("http://localhost:8080/playback " ,data ,config )
+              .then((response) => {
+                  newArray = response.data;
+                  this.setStateTracks(newArray) 
+              })
     }
 
     getAlbumTrackList(){

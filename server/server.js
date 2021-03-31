@@ -1,18 +1,20 @@
+
 const express = require('express')
 const request = require('request')
 const querystring = require('querystring')
 const dotenv = require('dotenv')
-const { default: axios } = require('axios')
-const getLyrics = 'genius-lyrics-api';
 const fs = require("fs");
 const addRequestId = require("express-request-id")();
-const { v4: uuidv4 } = require("uuid");
-var bodyParser = require("body-parser");
-var multer = require("multer");
-var forms = multer();
-
-
+const bodyParser = require("body-parser");
+const multer = require("multer");
+const forms = multer();
+const cors = require('cors')
 const app = express()
+
+
+
+app.use(cors())
+
 app.use(addRequestId);
 
 app.use(bodyParser.json());
@@ -56,16 +58,8 @@ app.get('/callback', function(req, res) {
   })
 });
 
-app.get('/playback', function(req, res){
-  let options ={
-  apiKey: process.env.GENUIS_TOKEN,
-	title: 'Blinding Lights',
-	artist: 'The Weeknd',
-	optimizeQuery: true
-  }
-  getLyrics(options).then((lyrics) => console.log(lyrics));
-  res.json(lyrics)
-})
+
+
 app.get('/user/favourites/:id', function(req, res){
   const readFile = (fs.readFileSync("./data/users.json", "utf8"));
   const oldJson = JSON.parse(readFile)
@@ -176,7 +170,7 @@ app.post('/user/recent/:id', function(req, res){
 
 })
 let port = process.env.PORT || 8888
-console.log(`Listening on port ${port}. Go /login to initiate authentication flow.`)
+console.log(`Listening on port ${port}. authencation server.`)
 const result = dotenv.config()
 
 
