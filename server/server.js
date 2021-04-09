@@ -8,7 +8,7 @@ const addRequestId = require("express-request-id")();
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const forms = multer();
-const cors = require('cors')
+const cors = require('cors');
 const app = express()
 
 
@@ -168,6 +168,16 @@ app.post('/user/recent/:id', function(req, res){
   res.json('user added')
 }
 
+})
+
+app.delete('/user/favourite/:id', function(req, res){
+  const readFile = (fs.readFileSync("./data/users.json", "utf8"));
+  const oldJson = JSON.parse(readFile);
+  const existingUserIndex = oldJson.findIndex((e)=> e.id === req.params.id) 
+  const existingAlbumIndex = oldJson[existingUserIndex].favAlbums.findIndex((e)=> e.album.toUpperCase() === req.body.album.toUpperCase())
+  oldJson[existingUserIndex].favAlbums.splice(existingUserIndex , 1)
+  fs.writeFileSync("./data/users.json", JSON.stringify(oldJson), "utf-8")
+  res.json('album added')
 })
 let port = process.env.PORT || 8888
 console.log(`Listening on port ${port}. authencation server.`)

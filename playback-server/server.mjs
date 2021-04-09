@@ -10,11 +10,11 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(forms.array());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+ 
 app.post('/playback', function(req, res){
 	let newArray = [];
 	let options = {
-	apiKey: 'ENTER YOUR GENUIS API KEY HERE',
+	apiKey: 'Nd9cZuvDxu-q2mvaGXVxV7LKZFrrNGkuufZwGEFM9QNDzHNwTZOZUUKAd6fI9aps',
 	title: req.body.album[0],
 	artist: req.body.artist,
 	optimizeQuery: true
