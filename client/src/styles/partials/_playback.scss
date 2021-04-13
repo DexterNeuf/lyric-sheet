@@ -79,6 +79,7 @@ p {
     height: 214px;
   }
   &__text {
+    padding-top: 0.4rem;
     display: inline-block;
     width: 214px;
     z-index: 999;
@@ -96,6 +97,12 @@ p {
       font-family: "Roboto", sans-serif;
       font-weight: 100;
       color: rgb(207, 207, 207);
+    }
+  }
+  &__delete {
+    float: right;
+    :hover {
+      cursor: pointer;
     }
   }
 }

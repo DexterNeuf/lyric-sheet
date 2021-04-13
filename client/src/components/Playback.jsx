@@ -6,7 +6,7 @@ import {IconContext} from "react-icons";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IoMdSkipBackward, IoMdSkipForward } from "react-icons/io";
 import { IoPauseCircleOutline, IoPlayCircleOutline} from "react-icons/io5";
-import { ImCancelCircle } from "react-icons/im";
+import { ImCancelCircle, IoTrashBinOutline } from "react-icons/im";
 import styled from "styled-components";
 
 
@@ -43,6 +43,7 @@ class Playback extends React.Component{
             Lyricswrapper : ""
         }
     }
+    
     cancel(){
         fetch('https://api.spotify.com/v1/me/player/pause', {
             method:'PUT',
@@ -117,6 +118,16 @@ class Playback extends React.Component{
             })
         })
     }
+    delete(album){
+        const data = {
+            album: album
+        }
+        axios.patch(backend + "favourite/" + this.state.id, data)
+        .then((response) => {
+            this.getUserFavouriteAlbums();
+        })
+    }
+
     favouriteAlbum(){
         const data = {
             album : this.state.albumName,
@@ -129,6 +140,7 @@ class Playback extends React.Component{
             this.getUserFavouriteAlbums();
         })
     }
+    
     recentAlbum(){
         const data = {
             album : this.state.albumName,
@@ -362,6 +374,11 @@ class Playback extends React.Component{
                 <p>{ele.albumArtist}</p>
             </div>
             </a>
+            <span className="album__delete" onClick={() =>{this.delete(ele.album)}} >
+            <IconContext.Provider value={{ size: "1.30em"}}>
+            <ImCancelCircle/>
+            </IconContext.Provider>
+                </span>
         </div>
         )
         }) 
@@ -436,7 +453,10 @@ class Playback extends React.Component{
                     <AiOutlineHeart/>
                 </span>
                 :
-                <AiFillHeart/>
+                <span onClick={() =>{this.delete(this.state.albumName)}}>
+                    <AiFillHeart/>
+                </span>
+                
                 }
                 </IconContext.Provider>
             </div>

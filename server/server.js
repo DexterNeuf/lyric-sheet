@@ -170,15 +170,18 @@ app.post('/user/recent/:id', function(req, res){
 
 })
 
-app.delete('/user/favourite/:id', function(req, res){
-  const readFile = (fs.readFileSync("./data/users.json", "utf8"));
-  const oldJson = JSON.parse(readFile);
-  const existingUserIndex = oldJson.findIndex((e)=> e.id === req.params.id) 
-  const existingAlbumIndex = oldJson[existingUserIndex].favAlbums.findIndex((e)=> e.album.toUpperCase() === req.body.album.toUpperCase())
-  oldJson[existingUserIndex].favAlbums.splice(existingUserIndex , 1)
+app.patch('/user/favourite/:id', function(req, res){
+  let readFile = (fs.readFileSync("./data/users.json", "utf8"));
+  let oldJson = JSON.parse(readFile);
+  let existingUserIndex = oldJson.findIndex((e)=> e.id === req.params.id) 
+  let existingAlbumIndex = oldJson[existingUserIndex].favAlbums.findIndex((e)=> e.album.toUpperCase() === req.body.album.toUpperCase())
+  oldJson[existingUserIndex].favAlbums.splice(existingAlbumIndex , 1)
   fs.writeFileSync("./data/users.json", JSON.stringify(oldJson), "utf-8")
   res.json('album added')
+  console.log(req.body.album)
+  console.log(req.params.id)
 })
+
 let port = process.env.PORT || 8888
 console.log(`Listening on port ${port}. authencation server.`)
 const result = dotenv.config()
