@@ -40,7 +40,10 @@ class Playback extends React.Component{
             albumImg: "",
             currentSongIndex: 0,
             albumHasChanged: true,
-            Lyricswrapper : ""
+            Lyricswrapper : "",
+            progress_ms : 0,
+            duration_ms : 0,
+            progressBar : ""
         }
     }
     
@@ -186,7 +189,14 @@ class Playback extends React.Component{
                 filter: blur(5.5em) opacity(0.6);
             }
             }
-          `} , () =>{
+            
+          `,
+          progressBar: styled.div`
+          width: 50%;
+          background-color: #eee;
+          border: 0.1em solid transparent;
+          height: 0.45em;
+        `} , () =>{
                 this.findSongIndex()
             });
         
@@ -253,8 +263,11 @@ class Playback extends React.Component{
             albumName: data.item.album.name,
             albumLength: data.item.album.total_tracks,
             albumId: data.item.album.id,
-            albumImg:data.item.album.images[0].url,
-            albumLink:data.item.album.external_urls.spotify }, () =>{
+            albumImg: data.item.album.images[0].url,
+            albumLink: data.item.album.external_urls.spotify,
+            progress : data.progress_ms,
+            duration : data.item.duration_ms
+         }, () =>{
                 this.getAlbumTrackList();
             })
         }).catch((error) => console.log(error))
@@ -416,50 +429,56 @@ class Playback extends React.Component{
     else if (this.state.albumWithLyrics[this.state.currentSongIndex] && this.state.albumHasChanged){
         return(
             <div>
-             <this.state.Lyricswrapper>
-                 <div className="lyrics">
-                 <p><span className="lyrics__title">#{this.state.trackNumber} - {this.state.trackName}</span> <p></p>{this.state.albumWithLyrics[this.state.currentSongIndex].lyrics} 
-                </p>
+                <this.state.Lyricswrapper>
+                    <div className="lyrics">
+                    <p><span className="lyrics__title">#{this.state.trackNumber} - {this.state.trackName}</span> <p></p>{this.state.albumWithLyrics[this.state.currentSongIndex].lyrics} 
+                    </p>
+                        </div>
+                </this.state.Lyricswrapper>
+                <div className="playback-bar">
+                    <div className="progress">
+                        <this.state.progressBar>
+                        </this.state.progressBar>
                     </div>
-             </this.state.Lyricswrapper>
-            <div className="playback-bar">
-                <div className="playback-bar__first">
-                <span onClick={() =>{this.cancel()}}>
-                    <ImCancelCircle/>
-                </span>
+                    <div className="playback-bar__wrapper">
+                        <div className="playback-bar__first">
+                        <span onClick={() =>{this.cancel()}}>
+                            <ImCancelCircle/>
+                        </span>
+                        </div>
+                        <div className="playback-bar__controls">
+                        
+                            <span onClick={() =>{this.previousTrack()}}>
+                            <IoMdSkipBackward/>
+                            </span> 
+                            <IconContext.Provider value={{ size: "3em"}}>
+                            {this.state.isPlaying ?
+                            <span onClick={() =>{this.pause()}}>
+                            <IoPauseCircleOutline/>
+                            </span>
+                            : <span onClick={() =>{this.resume()}}>
+                            <IoPlayCircleOutline />
+                            </span>
+                            }</IconContext.Provider>
+                            <span onClick={() =>{this.nextTrack()}}>
+                            <IoMdSkipForward/>
+                            </span>
+                        </div>
+                        <div className="playback-bar__last">
+                        <IconContext.Provider value={{ size: "1.75em" , className: 'react-icons' }}>
+                        {!isAlbumFavourited ?
+                        <span onClick={() =>{this.favouriteAlbum()}}>
+                            <AiOutlineHeart/>
+                        </span>
+                        :
+                        <span onClick={() =>{this.delete(this.state.albumName)}}>
+                            <AiFillHeart/>
+                        </span>
+                        
+                        }
+                        </IconContext.Provider>
+                    </div>
                 </div>
-                <div className="playback-bar__controls">
-                    
-                    <span onClick={() =>{this.previousTrack()}}>
-                    <IoMdSkipBackward/>
-                    </span> 
-                    <IconContext.Provider value={{ size: "3em"}}>
-                    {this.state.isPlaying ?
-                    <span onClick={() =>{this.pause()}}>
-                    <IoPauseCircleOutline/>
-                    </span>
-                    : <span onClick={() =>{this.resume()}}>
-                    <IoPlayCircleOutline />
-                    </span>
-                    }</IconContext.Provider>
-                    <span onClick={() =>{this.nextTrack()}}>
-                    <IoMdSkipForward/>
-                    </span>
-                </div>
-                <div className="playback-bar__last">
-                <IconContext.Provider value={{ size: "1.75em" , className: 'react-icons' }}>
-                {!isAlbumFavourited ?
-                <span onClick={() =>{this.favouriteAlbum()}}>
-                    <AiOutlineHeart/>
-                </span>
-                :
-                <span onClick={() =>{this.delete(this.state.albumName)}}>
-                    <AiFillHeart/>
-                </span>
-                
-                }
-                </IconContext.Provider>
-            </div>
          </div>
         </div>
         )

@@ -110,15 +110,18 @@ p {
 .playback-bar {
   position: -webkit-sticky;
   border-radius: 4px;
-  display: flex;
-  align-items: center;
   position: sticky;
   bottom: 0px;
-  height: 63px;
+  height: 83px;
   width: 500px;
   background-color: rgba(10, 10, 10, 0.99);
   margin: 0 auto;
   z-index: 99999;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+  }
   &__controls {
     width: 50%;
     display: flex;
@@ -141,4 +144,15 @@ p {
 
 .react-icons {
   margin-right: 10px;
+}
+.progress {
+  border: 0.15em solid #eee;
+  height: 0.5em;
+  margin-bottom: 10px;
+}
+.progress-bar {
+  width: 50%;
+  background-color: #eee;
+  border: 0.1em solid transparent;
+  height: 0.45em;
 }
