@@ -1,12 +1,11 @@
 import React from "react";
 import  queryString from 'query-string'
 import axios from "axios"
-import { getLyrics} from 'genius-lyrics-api';
 import {IconContext} from "react-icons";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IoMdSkipBackward, IoMdSkipForward } from "react-icons/io";
 import { IoPauseCircleOutline, IoPlayCircleOutline} from "react-icons/io5";
-import { ImCancelCircle, IoTrashBinOutline } from "react-icons/im";
+import { ImCancelCircle} from "react-icons/im";
 import styled from "styled-components";
 
 
@@ -192,7 +191,7 @@ class Playback extends React.Component{
             
           `,
           progressBar: styled.div`
-          width: 50%;
+          width: ${this.state.progress * 100 / this.state.duration}%;
           background-color: #eee;
           border: 0.1em solid transparent;
           height: 0.45em;
@@ -295,6 +294,7 @@ class Playback extends React.Component{
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(response => response.json())
         .then( data => {
+            console.log(this.state.progress + "  " + this.state.duration)
             if(data.item.track_number !== this.state.trackNumber){
                 this.setState({
                     trackNumber: data.item.track_number
@@ -333,7 +333,9 @@ class Playback extends React.Component{
             //checks track if the same album has been playing then adds to recently played in backend
             }else if(this.state.recentCounter < 10 && !this.state.intialRun ){
                 this.setState({
-                    recentCounter: (this.state.recentCounter + 1)
+                    recentCounter: (this.state.recentCounter + 1),
+                    progress : data.progress_ms,
+                    duration : data.item.duration_ms
                 },()=>{
                     if(this.state.recentCounter === 10 ){
                         this.recentAlbum()
@@ -342,7 +344,6 @@ class Playback extends React.Component{
             }
         }).catch((error) => console.log(error))
         }
-        // eventually have the time count up to 30 seconds to add to recently played
 
     }
 
@@ -492,7 +493,7 @@ class Playback extends React.Component{
                  {this.setState({
                      albumHasChanged : false
                  }, () => {
-                    setTimeout(() => { this.getCurrentlyPlaying(); }, 250);
+                    setTimeout(() => { this.getCurrentlyPlaying(); }, 550);
                  })}
                  </div>}
                 </div>
