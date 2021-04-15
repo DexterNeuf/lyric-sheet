@@ -155,6 +155,16 @@ class Playback extends React.Component{
             console.log(response)
         })
     }
+    updatePlaybackBar(){
+        this.setState({
+        progressBar: styled.div`
+        width: ${this.state.progress * 100 / this.state.duration}%;
+        background-color: #eee;
+          border: 0.1em solid transparent;
+          height: 0.45em;
+        ` })
+    }
+
     // sets the array with the grabbed lyrics to state
     setStateTracks(newArray){
         this.setState({
@@ -294,7 +304,12 @@ class Playback extends React.Component{
             headers: {'Authorization': 'Bearer ' + this.state.accessToken}
         }).then(response => response.json())
         .then( data => {
-            console.log(this.state.progress + "  " + this.state.duration)
+            this.setState({
+                progress : data.progress_ms,
+                duration : data.item.duration_ms,
+            },() =>{
+                this.updatePlaybackBar()
+            })
             if(data.item.track_number !== this.state.trackNumber){
                 this.setState({
                     trackNumber: data.item.track_number
@@ -334,8 +349,6 @@ class Playback extends React.Component{
             }else if(this.state.recentCounter < 10 && !this.state.intialRun ){
                 this.setState({
                     recentCounter: (this.state.recentCounter + 1),
-                    progress : data.progress_ms,
-                    duration : data.item.duration_ms
                 },()=>{
                     if(this.state.recentCounter === 10 ){
                         this.recentAlbum()
