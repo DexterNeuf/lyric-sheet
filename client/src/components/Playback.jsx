@@ -158,7 +158,7 @@ class Playback extends React.Component{
     updatePlaybackBar(){
         this.setState({
         progressBar: styled.div`
-        width: ${this.state.progress * 100 / this.state.duration}%;
+        width: ${this.state.percentDone}%;
         background-color: #eee;
           border: 0.1em solid transparent;
           height: 0.45em;
@@ -201,7 +201,7 @@ class Playback extends React.Component{
             
           `,
           progressBar: styled.div`
-          width: ${this.state.progress * 100 / this.state.duration}%;
+          width: ${this.state.percentDone}%;
           background-color: #eee;
           border: 0.1em solid transparent;
           height: 0.45em;
@@ -307,6 +307,7 @@ class Playback extends React.Component{
             this.setState({
                 progress : data.progress_ms,
                 duration : data.item.duration_ms,
+                percentDone: data.progress_ms * 100 / data.item.duration_ms
             },() =>{
                 this.updatePlaybackBar()
             })
@@ -322,6 +323,12 @@ class Playback extends React.Component{
                         pausedCounter: (this.state.pausedCounter + 1)
                     })
         
+            }
+            if ((data.progress_ms * 100 / data.item.duration_ms) >= 50){
+                window.scrollTo({
+                    top: document.documentElement.clientHeight,
+                    behavior: 'smooth'
+                  });
             }
             // when the playback is paused resets paused counter so render can contine
             if (data.is_playing === true && this.state.pausedCounter >= 5){
@@ -388,7 +395,6 @@ class Playback extends React.Component{
     let newFavourite = "";
     let newRecent = "";
     let isAlbumFavourited = this.state.favouriteAlbums.find(e => e.album === this.state.albumName)
-    
 
     if (this.state.favouriteAlbums.length !== 0){
         newFavourite = this.state.favouriteAlbums.map((ele) => {
