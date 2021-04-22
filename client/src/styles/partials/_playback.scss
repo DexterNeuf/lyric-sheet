@@ -74,6 +74,9 @@ p {
   background: rgba(20, 20, 20, 0.9);
   padding: 1rem;
   border-radius: 6px;
+  &:hover {
+    background-color: rgba(53, 53, 53, 0.7);
+  }
   img {
     width: 214px;
     height: 214px;

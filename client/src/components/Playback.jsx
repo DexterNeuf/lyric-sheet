@@ -324,7 +324,7 @@ class Playback extends React.Component{
                     })
         
             }
-            if ((data.progress_ms * 100 / data.item.duration_ms) >= 50){
+            if ((data.progress_ms * 100 / data.item.duration_ms) >= 50 && data.is_playing ){
                 window.scrollTo({
                     top: document.documentElement.clientHeight,
                     behavior: 'smooth'
