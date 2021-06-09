@@ -108,53 +108,9 @@ class Playback extends React.Component{
             })
         })
     }
-    getUserRecentAlbums(){
-        let config ={
-            headers:{
-            "Access-Control-Allow-Origin": "*"
-            }
-        }
-        axios.get( backend + "recent/"+ this.state.id , config).then((res) => {
-            this.setState({
-                recentAlbums: res.data
-            })
-        })
-    }
-    delete(album){
-        const data = {
-            album: album
-        }
-        axios.patch(backend + "favourite/" + this.state.id, data)
-        .then((response) => {
-            this.getUserFavouriteAlbums();
-        })
-    }
-
-    favouriteAlbum(){
-        const data = {
-            album : this.state.albumName,
-            albumImg : this.state.albumImg,
-            albumArtist : this.state.trackArtist,
-            albumLink : this.state.albumLink
-        }
-        axios.post(backend + "favourite/" + this.state.id, data)
-        .then((response) => {
-            this.getUserFavouriteAlbums();
-        })
-    }
     
-    recentAlbum(){
-        const data = {
-            album : this.state.albumName,
-            albumImg : this.state.albumImg,
-            albumArtist : this.state.trackArtist,
-            albumLink : this.state.albumLink
-        }
-        axios.post(backend + "recent/" + this.state.id, data)
-        .then((response) => {
-            console.log(response)
-        })
-    }
+
+    
     updatePlaybackBar(){
         this.setState({
         progressBar: styled.div`
@@ -381,9 +337,6 @@ class Playback extends React.Component{
         .then(data => this.setState({
             name:data.display_name,
             id: data.id
-        },() => {
-            this.getUserFavouriteAlbums()
-            this.getUserRecentAlbums()
         })); 
 
     }
