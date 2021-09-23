@@ -41,22 +41,22 @@
     ],
     "recentAlbums": [
       {
-        "album": "Born In The U.S.A.",
-        "albumImg": "https://i.scdn.co/image/ab67616d0000b273a7865e686c36a4adda6c9978",
-        "albumArtist": "Bruce Springsteen",
-        "albumLink": "https://open.spotify.com/album/0PMasrHdpaoIRuHuhHp72O"
-      },
-      {
-        "album": "Born To Run",
-        "albumImg": "https://i.scdn.co/image/ab67616d0000b273503143a281a3f30268dcd9f9",
-        "albumArtist": "Bruce Springsteen",
-        "albumLink": "https://open.spotify.com/album/43YIoHKSrEw2GJsWmhZIpu"
-      },
-      {
         "album": "Teens Of Denial",
         "albumImg": "https://i.scdn.co/image/ab67616d0000b273dc535fcdef95c1e8f70ff019",
         "albumArtist": "Car Seat Headrest",
         "albumLink": "https://open.spotify.com/album/3KpYyDP8q8sUBxatHaYEsP"
+      },
+      {
+        "album": "SINNER GET READY",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b27313b45fe30d1afd2e909fa410",
+        "albumArtist": "Lingua Ignota",
+        "albumLink": "https://open.spotify.com/album/06wtf2TCkmyTgS1yZGiSr5"
+      },
+      {
+        "album": "Born In The U.S.A.",
+        "albumImg": "https://i.scdn.co/image/ab67616d0000b273a7865e686c36a4adda6c9978",
+        "albumArtist": "Bruce Springsteen",
+        "albumLink": "https://open.spotify.com/album/0PMasrHdpaoIRuHuhHp72O"
       }
     ]
   },
